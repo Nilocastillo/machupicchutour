@@ -10,12 +10,5 @@
 	},
 	"observability": {
 		"enabled": true
-	},
-	"secrets": {
-		"required": [
-			"RESEND_API_KEY",
-			"CONTACT_FROM_EMAIL",
-			"CONTACT_TO_EMAIL"
-		]
 	}
 }

@@ -28,7 +28,7 @@ Replace the example values in `.dev.vars`. The sender address must use a domain 
 
 ## Cloudflare secrets
 
-Configure the required production secrets before deploying:
+The site can be deployed before Resend is configured. To enable email delivery from the contact form, add these production secrets:
 
 ```sh
 bunx wrangler secret put RESEND_API_KEY
@@ -36,7 +36,7 @@ bunx wrangler secret put CONTACT_FROM_EMAIL
 bunx wrangler secret put CONTACT_TO_EMAIL
 ```
 
-Then build and deploy:
+Build and deploy at any time with:
 
 ```sh
 bun run build
