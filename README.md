@@ -1,43 +1,53 @@
-# Astro Starter Kit: Minimal
+# Machu Picchu Tours
+
+Astro 7 website deployed as a hybrid Cloudflare Worker:
+
+- Home, contact, blog and tour pages are prerendered as static assets.
+- The custom 404 and `/api/contact` are rendered by Cloudflare Workers.
+- The contact form is a Preact island and sends email through Resend.
+
+## Local setup
 
 ```sh
-bun create astro@latest -- --template minimal
+bun install
+cp .env.example .dev.vars
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Replace the example values in `.dev.vars`. The sender address must use a domain verified in Resend.
 
-## 🚀 Project Structure
+## Commands
 
-Inside of your Astro project, you'll see the following folders and files:
+| Command | Action |
+| :-- | :-- |
+| `bun run dev` | Start Astro development using the Cloudflare runtime |
+| `bun run check` | Run Astro and TypeScript diagnostics |
+| `bun run build` | Check and build the static assets and Worker |
+| `bun run preview` | Preview the production build with `workerd` |
+| `bun run cf-typegen` | Regenerate Cloudflare binding and runtime types |
+| `bun run deploy` | Deploy the latest build with Wrangler |
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+## Cloudflare secrets
+
+Configure the required production secrets before deploying:
+
+```sh
+bunx wrangler secret put RESEND_API_KEY
+bunx wrangler secret put CONTACT_FROM_EMAIL
+bunx wrangler secret put CONTACT_TO_EMAIL
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Then build and deploy:
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```sh
+bun run build
+bun run deploy
+```
 
-Any static assets, like images, can be placed in the `public/` directory.
+For Cloudflare Workers Builds, use:
 
-## 🧞 Commands
+- Build command: `bun run build`
+- Deploy command: `bun run deploy`
+- Production branch: `main`
+- Optional build variable: `BUN_VERSION=1.4.0`
 
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `bun install`             | Installs dependencies                            |
-| `bun dev`             | Starts local dev server at `localhost:4321`      |
-| `bun build`           | Build your production site to `./dist/`          |
-| `bun preview`         | Preview your build locally, before deploying     |
-| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `bun astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+The Worker configuration lives in `wrangler.jsonc`. Do not commit `.dev.vars`, `.env` files or `.wrangler` deployment metadata.

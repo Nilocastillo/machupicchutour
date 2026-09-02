@@ -365,10 +365,7 @@ const languages = [
 		document.querySelectorAll<HTMLDetailsElement>("[data-mega-menu]"),
 	);
 	const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
-	const closeTimers = new WeakMap<
-		HTMLDetailsElement,
-		ReturnType<typeof setTimeout>
-	>();
+	const closeTimers = new WeakMap<HTMLDetailsElement, number>();
 
 	megaMenus.forEach((menu) => {
 		menu.addEventListener("pointerenter", () => {

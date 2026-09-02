@@ -9,6 +9,8 @@ import TourFaq from "../../components/tour/TourFaq.astro";
 import TourBookingForm from "../../components/tour/TourBookingForm.astro";
 import { tourDetails, type DetailedTour } from "../../data/tour-details";
 
+export const prerender = true;
+
 export function getStaticPaths() {
 	return tourDetails.map((tour) => ({
 		params: { slug: tour.slug },

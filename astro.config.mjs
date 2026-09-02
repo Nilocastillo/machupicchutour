@@ -1,15 +1,16 @@
 // @ts-check
 import { defineConfig, envField } from 'astro/config';
-import node from '@astrojs/node';
+import cloudflare from '@astrojs/cloudflare';
 import preact from '@astrojs/preact';
 import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://machupicchutour.com',
-	adapter: node({
-		mode: 'standalone',
+	adapter: cloudflare({
+		imageService: 'compile',
 	}),
+	session: false,
 	integrations: [preact()],
 	env: {
 		schema: {

@@ -1,0 +1,21 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "trekking-web",
+	"main": "@astrojs/cloudflare/entrypoints/server",
+	"compatibility_date": "2026-09-01",
+	"compatibility_flags": ["nodejs_compat"],
+	"assets": {
+		"binding": "ASSETS",
+		"directory": "./dist"
+	},
+	"observability": {
+		"enabled": true
+	},
+	"secrets": {
+		"required": [
+			"RESEND_API_KEY",
+			"CONTACT_FROM_EMAIL",
+			"CONTACT_TO_EMAIL"
+		]
+	}
+}
