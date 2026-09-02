@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+export const prerender = true;
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+	(a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
+);
+---
+
+<Layout
+	title="Peru Travel Journal | Machu Picchu Tours"
+	description="Practical Peru itineraries, local Cusco advice and thoughtful travel guides from the Machu Picchu Tours team."
+>
+	<Header />
+
+	<main id="top" class="bg-mist">
+		<section class="relative isolate overflow-hidden pt-48 pb-20 sm:pt-52 sm:pb-28 lg:pt-56 lg:pb-36">
+			<div class="page-shell">
+				<p class="eyebrow text-sun">Stories from Peru</p>
+				<h1 class="mt-7 max-w-6xl font-display text-[clamp(4.2rem,9vw,9.5rem)] font-medium leading-[0.82] tracking-[-0.06em] text-ink">
+					Field notes for a<br /><em class="font-normal text-ink/44">better journey.</em>
+				</h1>
+				<p class="mt-8 max-w-2xl border-l-2 border-sun pl-5 text-sm leading-7 text-ink/66 sm:pl-7 sm:text-base">Practical routes, cultural context and useful advice written by people who live and travel in Peru.</p>
+
+				<div class="mt-14 grid gap-5 sm:mt-20 lg:grid-cols-12">
+					{posts.map((post, index) => (
+						<article class:list={['group relative min-h-[34rem] overflow-hidden rounded-[1.75rem] bg-ink', index === 0 ? 'lg:col-span-8 lg:min-h-[42rem]' : 'lg:col-span-4']}>
+							<img class="absolute inset-0 size-full object-cover transition duration-700 group-hover:scale-[1.035]" src={post.data.heroImage} alt={post.data.heroAlt} width="1500" height="800" loading={index === 0 ? 'eager' : 'lazy'} />
+							<div class="absolute inset-0 bg-gradient-to-t from-black/92 via-black/10 to-black/20"></div>
+							<div class="absolute inset-x-0 top-0 flex items-center justify-between p-6 sm:p-8">
+								<span class="rounded-full border border-white/20 bg-ink/35 px-3.5 py-2 text-[8px] font-extrabold tracking-[0.14em] text-white uppercase backdrop-blur-md">{post.data.category}</span>
+								<span class="text-[8px] font-bold tracking-[0.13em] text-white/62 uppercase">{post.data.readingTime}</span>
+							</div>
+							<div class="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8 lg:p-10">
+								<p class="text-[8px] font-extrabold tracking-[0.15em] text-white/48 uppercase">{post.data.featuredLabel}</p>
+								<h2 class="mt-4 max-w-4xl font-display text-[clamp(2.6rem,5vw,5.2rem)] font-medium leading-[0.9] tracking-[-0.045em]">{post.data.title}</h2>
+								<p class="mt-5 max-w-2xl text-xs leading-6 text-white/72 sm:text-sm sm:leading-7">{post.data.description}</p>
+								<span class="mt-7 inline-flex items-center gap-3 text-[9px] font-extrabold tracking-[0.13em] uppercase">Read the guide <span class="transition group-hover:translate-x-1" aria-hidden="true">→</span></span>
+							</div>
+							<a class="absolute inset-0 rounded-[1.75rem] focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-white" href={`/blog/${post.id}`} aria-label={`Read ${post.data.title}`}></a>
+						</article>
+					))}
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>

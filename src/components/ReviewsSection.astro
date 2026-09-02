@@ -1,0 +1,32 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { reviewPlatforms, reviews } from '../data/home';
+---
+
+<section id="reviews" class="section-boundary overflow-hidden bg-mist py-20 text-ink sm:py-28 lg:py-36">
+	<div class="page-shell">
+		<div class="reveal grid gap-10 border-b border-ink/12 pb-10 lg:grid-cols-[1fr_0.7fr] lg:items-end">
+			<SectionHeading eyebrow="Verified traveler stories" title={'What our<br /><em class="font-normal text-ink/48">travelers say.</em>'} description="Over 1,200 verified reviews on TripAdvisor and Google, with a consistent average rating of 4.9 out of 5." />
+			<div class="lg:text-right">
+				<p class="font-sans text-7xl font-extrabold leading-none tracking-[-0.055em]">4.9</p>
+				<p class="mt-2 text-sm tracking-[0.22em] text-ink/48">★★★★★</p>
+				<a class="mt-4 inline-flex items-center gap-2 text-[9px] font-extrabold tracking-[0.13em] text-ink/58 uppercase transition hover:text-ink" href="https://www.tripadvisor.com/Attraction_Review-g294314-d10075985-Reviews-Machu_Picchu_Peru_Tours-Cusco_Cusco_Region.html" target="_blank" rel="nofollow noreferrer">See all on TripAdvisor ↗</a>
+			</div>
+		</div>
+
+		<div class="reviews-track mt-10 flex snap-x gap-4 overflow-x-auto pb-6">
+			{reviews.map((review) => (
+				<article class="min-h-64 w-[min(86vw,23rem)] shrink-0 snap-start rounded-[1.5rem] border border-ink/10 bg-ink/[0.025] p-6 shadow-[0_18px_50px_rgba(21,25,22,0.055)] sm:p-7">
+					<div class="flex items-center justify-between"><span class="text-xs tracking-[0.16em] text-ink/52">★★★★★</span><span class="text-[9px] font-bold tracking-[0.12em] text-ink/34 uppercase">Verified</span></div>
+					<blockquote class="mt-6 font-sans text-[0.94rem] font-medium leading-7 text-ink/84">“{review.text}”</blockquote>
+					<div class="mt-7 border-t border-ink/10 pt-4"><p class="text-xs font-extrabold">{review.author}</p><p class="mt-1 text-[10px] text-ink/42">{review.date}</p></div>
+				</article>
+			))}
+		</div>
+
+		<div class="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-ink/10 pt-8">
+			<p class="w-full text-center text-[9px] font-extrabold tracking-[0.14em] text-ink/36 uppercase sm:w-auto">Top rated on</p>
+			{reviewPlatforms.map((platform) => <span class="font-sans text-sm font-extrabold tracking-[-0.02em] text-ink/62">{platform}</span>)}
+		</div>
+	</div>
+</section>

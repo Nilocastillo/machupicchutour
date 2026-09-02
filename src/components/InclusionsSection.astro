@@ -1,0 +1,21 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { inclusions } from '../data/home';
+---
+
+<section class="bg-paper py-20 sm:py-28 lg:py-36">
+	<div class="page-shell grid gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-24">
+		<div class="reveal">
+			<SectionHeading eyebrow="Clear from the start" title={'What is included in our<br /><em class="font-normal text-pine-light">Machu Picchu tours?</em>'} description="Every tour is clearly detailed before you book. Depending on the package, inclusions typically cover the following essentials." />
+			<div class="mt-9 inline-flex rounded-full border border-ink/12 bg-ink/5 px-5 py-3 text-[10px] font-extrabold tracking-[0.13em] text-ink/58 uppercase">No hidden fees · No surprises</div>
+		</div>
+
+		<div class="reveal overflow-hidden rounded-[1.75rem] border border-ink/10 bg-canvas">
+			{inclusions.map((item) => (
+				<div class="border-b border-ink/10 px-5 py-5 last:border-b-0 sm:px-7">
+					<p class="text-sm font-semibold leading-6 text-ink/70">{item}</p>
+				</div>
+			))}
+		</div>
+	</div>
+</section>

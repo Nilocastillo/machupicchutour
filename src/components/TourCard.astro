@@ -1,0 +1,41 @@
+---
+import type { Tour } from '../data/home';
+
+interface Props extends Tour {
+	index?: number;
+	layoutClass?: string;
+	variant?: 'standard' | 'featured' | 'tall' | 'compact';
+}
+
+const { image, title, href, duration, price, oldPrice, tag = 'Peru journey', index = 0, layoutClass = '', variant = 'standard' } = Astro.props;
+const isBento = variant !== 'standard';
+const compact = variant === 'compact';
+const featured = variant === 'featured';
+---
+
+<article class:list={[
+	'tour-card group relative flex flex-col overflow-hidden rounded-[1.5rem] bg-ink shadow-lift',
+	featured ? 'min-h-[34rem]' : compact ? 'min-h-[23rem]' : 'min-h-[30rem]',
+	isBento && 'lg:min-h-0',
+	layoutClass,
+]} style={`--item-index: ${index}`}>
+	<img class="tour-image absolute inset-0 size-full object-cover transition duration-700 ease-out" src={image} alt={title} loading="lazy" />
+	<div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/25 to-black/10"></div>
+	<div class:list={['relative flex items-start justify-between', compact ? 'p-4' : 'p-5 sm:p-6']}>
+		<span class:list={['rounded-full border font-extrabold tracking-[0.14em] text-white uppercase backdrop-blur-sm', isBento ? 'border-white/25 bg-ink/45' : 'border-white/30 bg-ink/30', compact ? 'px-3 py-1.5 text-[8px]' : 'px-3 py-2 text-[9px]']}>{tag}</span>
+		<span class:list={['grid place-items-center rounded-full transition duration-300 group-hover:-rotate-12 group-hover:bg-sun group-hover:text-white', isBento ? 'bg-sun/85 text-white' : 'bg-paper text-ink', compact ? 'size-9' : 'size-10']}>↗</span>
+	</div>
+	<div class:list={['relative mt-auto text-white', compact ? 'p-4 sm:p-5' : 'p-6 sm:p-7']}>
+		<p class:list={['font-extrabold tracking-[0.16em] text-white/60 uppercase', compact ? 'text-[8px]' : 'text-[9px]']}>{duration}</p>
+		<h3 class:list={[
+			'leading-[1.08]',
+			isBento ? 'font-sans font-extrabold tracking-[-0.025em]' : 'font-display font-medium',
+			compact ? 'mt-2 text-[1.15rem]' : featured ? 'mt-3 text-[2.1rem] sm:text-[2.5rem]' : 'mt-3 text-[1.7rem]',
+		]}>{title}</h3>
+		<div class:list={['flex items-end justify-between gap-3 border-t border-white/22', compact ? 'mt-3 pt-3' : 'mt-6 pt-4']}>
+			<p class:list={['font-bold tracking-[0.12em] text-white/55 uppercase', compact ? 'hidden text-[8px] xl:block' : 'text-[9px]']}>Per person</p>
+			<p class="ml-auto text-right"><span class:list={['mr-2 text-white/48 line-through', compact ? 'text-[9px]' : 'text-xs']}>{oldPrice}</span><strong class:list={['font-semibold text-white', isBento ? 'font-sans' : 'font-display', compact ? 'text-xl' : 'text-2xl']}>{price}</strong></p>
+		</div>
+	</div>
+	<a href={href} class="absolute inset-0" aria-label={`View ${title}`}></a>
+</article>

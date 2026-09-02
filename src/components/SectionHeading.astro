@@ -1,0 +1,18 @@
+---
+interface Props {
+	eyebrow?: string;
+	title: string;
+	description?: string;
+	theme?: 'light' | 'dark';
+	align?: 'left' | 'center';
+}
+
+const { eyebrow, title, description, theme = 'light', align = 'left' } = Astro.props;
+const centered = align === 'center';
+---
+
+<header class:list={['section-heading', centered && 'mx-auto text-center', centered ? 'max-w-3xl' : 'max-w-4xl']}>
+	{eyebrow && <p class:list={['eyebrow', theme === 'dark' ? 'text-white/48' : 'text-ink/42', centered && 'justify-center']}>{eyebrow}</p>}
+	<h2 class:list={['mt-6 font-display text-[clamp(2.8rem,5.5vw,5.8rem)] font-medium leading-[0.92] tracking-[-0.045em]', theme === 'dark' ? 'text-white' : 'text-ink']} set:html={title}></h2>
+	{description && <p class:list={['mt-6 max-w-2xl text-sm leading-7 sm:text-base', theme === 'dark' ? 'text-white/74' : 'text-ink/72', centered && 'mx-auto']}>{description}</p>}
+</header>

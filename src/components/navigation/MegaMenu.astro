@@ -1,0 +1,148 @@
+---
+import type { Tour } from "../../data/home";
+
+interface Props {
+	label: string;
+	href: string;
+	items: Tour[];
+}
+
+const { label, href, items } = Astro.props;
+const firstColumn = items.slice(0, 4);
+const secondColumn = items.slice(4, 8);
+const featuredImage = items[0]?.image;
+---
+
+<details class="mega-menu static" data-mega-menu>
+	<summary
+		class="nav-link mega-trigger relative flex cursor-pointer list-none select-none items-center gap-2 py-3 text-xs font-extrabold tracking-[0.065em] uppercase"
+	>
+		{label}
+		<svg
+			aria-hidden="true"
+			viewBox="0 0 16 16"
+			class="mega-chevron size-3 fill-none stroke-current"
+			stroke-width="1.7"
+		>
+			<path
+				d="m4 6 4 4 4-4"
+				stroke-linecap="round"
+				stroke-linejoin="round"></path>
+		</svg>
+	</summary>
+
+	<div
+		class="mega-panel absolute inset-x-0 top-full z-40 border-t border-ink/10 bg-paper shadow-[0_28px_70px_rgba(18,24,21,0.16)]"
+	>
+		<div
+			class="page-shell grid grid-cols-[0.7fr_1fr_1fr_0.85fr] gap-8 py-7"
+		>
+			<div class="border-r border-ink/10 pr-8">
+				<p
+					class="text-[8px] font-extrabold tracking-[0.16em] text-ink/38 uppercase"
+				>
+					Explore Peru
+				</p>
+				<h2
+					class="mt-4 max-w-52 font-sans text-[1.35rem] font-extrabold leading-[1.08] tracking-[-0.035em] text-ink"
+				>
+					Peru travel packages
+				</h2>
+				<p class="mt-4 max-w-56 text-[0.68rem] leading-5 text-ink/52">
+					Multi-day journeys connecting Machu Picchu with Peru's most memorable destinations.
+				</p>
+			</div>
+
+			<div>
+				<p
+					class="mb-2 text-[8px] font-extrabold tracking-[0.14em] text-ink/34 uppercase"
+				>
+					Popular journeys
+				</p>
+				<div class="grid">
+					{
+						firstColumn.map((item) => (
+							<a
+								class="mega-item group flex min-h-[3.55rem] items-center justify-between gap-4 border-b border-ink/9 py-2.5 last:border-b-0"
+								href={item.href}
+							>
+								<span class="min-w-0">
+									<strong class="line-clamp-1 block text-[0.68rem] font-extrabold leading-5 text-ink/76 transition group-hover:text-ink">
+										{item.title}
+									</strong>
+									<small class="mt-0.5 block text-[0.48rem] font-bold tracking-[0.1em] text-ink/34 uppercase">
+										{item.duration}
+									</small>
+								</span>
+								<span class="translate-x-0 text-xs text-ink/28 transition group-hover:translate-x-1 group-hover:text-sun" aria-hidden="true">→</span>
+							</a>
+						))
+					}
+				</div>
+			</div>
+
+			<div>
+				<p
+					class="mb-2 text-[8px] font-extrabold tracking-[0.14em] text-ink/34 uppercase"
+				>
+					More ways to explore
+				</p>
+				<div class="grid">
+					{
+						secondColumn.map((item) => (
+							<a
+								class="mega-item group flex min-h-[3.55rem] items-center justify-between gap-4 border-b border-ink/9 py-2.5 last:border-b-0"
+								href={item.href}
+							>
+								<span class="min-w-0">
+									<strong class="line-clamp-1 block text-[0.68rem] font-extrabold leading-5 text-ink/76 transition group-hover:text-ink">
+										{item.title}
+									</strong>
+									<small class="mt-0.5 block text-[0.48rem] font-bold tracking-[0.1em] text-ink/34 uppercase">
+										{item.duration}
+									</small>
+								</span>
+								<span class="translate-x-0 text-xs text-ink/28 transition group-hover:translate-x-1 group-hover:text-sun" aria-hidden="true">→</span>
+							</a>
+						))
+					}
+				</div>
+			</div>
+
+			<a
+				class="group relative min-h-60 overflow-hidden rounded-[1.2rem] bg-ink text-white"
+				href={href}
+			>
+				{
+					featuredImage && (
+						<img
+							class="absolute inset-0 size-full object-cover opacity-70 transition duration-700 group-hover:scale-105"
+							src={featuredImage}
+							alt=""
+							loading="lazy"
+							decoding="async"
+						/>
+					)
+				}
+				<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-black/10"></div>
+				<div class="absolute inset-x-0 bottom-0 p-5">
+					<p class="text-[8px] font-extrabold tracking-[0.14em] text-white/55 uppercase">2026 journeys</p>
+					<strong class="mt-2 block text-base font-extrabold leading-5">See every way to experience Peru</strong>
+					<span class="mt-4 inline-flex items-center gap-2 text-[9px] font-extrabold tracking-[0.11em] uppercase">Explore all <span class="transition group-hover:translate-x-1" aria-hidden="true">→</span></span>
+				</div>
+			</a>
+		</div>
+
+		<div class="border-t border-ink/10 bg-mist/80">
+			<div class="page-shell flex items-center justify-between gap-6 py-3.5">
+				<p class="text-[0.62rem] font-semibold text-ink/46">Eight complete itineraries, organized by our local team in Cusco.</p>
+				<a
+					class="inline-flex shrink-0 items-center gap-2 rounded-full bg-sun/88 px-5 py-2.5 text-[8px] font-extrabold tracking-[0.12em] text-white uppercase transition hover:-translate-y-px hover:bg-sun"
+					href={href}
+				>
+					View all Peru packages <span aria-hidden="true">→</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</details>

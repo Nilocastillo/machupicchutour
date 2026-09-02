@@ -1,0 +1,136 @@
+---
+import type { Tour } from '../data/home';
+
+interface Props {
+	tours: Tour[];
+}
+
+const { tours } = Astro.props;
+const searchableTours = Array.from(new Map(tours.map((tour) => [tour.href, tour])).values());
+---
+
+<div class="hero-tour-search relative z-30 mx-auto mt-9 w-full max-w-xl sm:mt-10" data-tour-search>
+	<form class="flex items-center gap-1.5 rounded-full border border-white/20 bg-paper/96 p-1 text-ink shadow-[0_18px_50px_rgba(5,12,9,0.25)] backdrop-blur-xl" data-search-form>
+		<label class="flex min-h-11 min-w-0 flex-1 items-center gap-2.5 px-3 sm:px-4">
+			<svg aria-hidden="true" viewBox="0 0 24 24" class="size-4.5 shrink-0 fill-none stroke-ink/40" stroke-width="1.8"><circle cx="10.7" cy="10.7" r="6.7"></circle><path d="m16 16 4 4" stroke-linecap="round"></path></svg>
+			<span class="sr-only">Search tours by title</span>
+			<input
+				class="min-w-0 w-full bg-transparent text-[0.78rem] font-semibold outline-none placeholder:text-ink/36 sm:text-sm"
+				type="search"
+				placeholder="Search tours by title ..."
+				autocomplete="off"
+				role="combobox"
+				aria-autocomplete="list"
+				aria-expanded="false"
+				aria-controls="hero-tour-results"
+				data-search-input
+			/>
+		</label>
+		<button class="grid size-11 shrink-0 place-items-center rounded-full bg-sun/88 text-white transition hover:scale-105 hover:bg-sun" type="submit" aria-label="Show matching tours">
+			<svg aria-hidden="true" viewBox="0 0 24 24" class="size-4 fill-none stroke-current" stroke-width="1.8"><path d="M5 12h14m-5-5 5 5-5 5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+		</button>
+	</form>
+
+	<div id="hero-tour-results" class="absolute top-[calc(100%+0.65rem)] left-1/2 w-[min(94vw,42rem)] -translate-x-1/2 overflow-hidden rounded-[1.4rem] border border-ink/10 bg-paper text-ink shadow-[0_28px_80px_rgba(5,12,9,0.32)]" role="listbox" data-search-panel hidden>
+		<div class="flex items-center justify-between border-b border-ink/9 px-4 py-3 sm:px-5">
+			<p class="text-[0.55rem] font-extrabold tracking-[0.14em] text-ink/38 uppercase">Tours and packages</p>
+			<p class="text-[0.58rem] font-bold text-ink/42" aria-live="polite" data-search-count>{searchableTours.length} tours</p>
+		</div>
+
+		<div class="tour-search-results grid max-h-[22rem] grid-cols-1 gap-1 overflow-y-auto p-2 sm:grid-cols-2" data-search-list>
+			{searchableTours.map((tour) => (
+				<a class="group grid min-h-[4.8rem] grid-cols-[3.8rem_1fr_auto] items-center gap-3 rounded-[1rem] p-2 transition hover:bg-ink/5 focus:bg-ink/5" href={tour.href} role="option" data-tour-result data-title={tour.title}>
+					<img class="size-[3.8rem] rounded-[0.8rem] object-cover" src={tour.image} alt="" loading="lazy" decoding="async" />
+					<span class="min-w-0">
+						<strong class="line-clamp-2 block font-sans text-[0.68rem] font-extrabold leading-[1.35] tracking-[-0.015em]">{tour.title}</strong>
+						<small class="mt-1 block text-[0.48rem] font-bold tracking-[0.1em] text-ink/38 uppercase">{tour.duration}</small>
+					</span>
+					<span class="pr-1 text-right">
+						<strong class="block text-[0.7rem] font-extrabold">{tour.price}</strong>
+						<small class="mt-1 block text-[0.7rem] text-ink/30 transition group-hover:translate-x-0.5 group-hover:text-ink">→</small>
+					</span>
+				</a>
+			))}
+			<p class="col-span-full px-5 py-10 text-center text-xs leading-6 text-ink/48" data-search-empty hidden>No tours found with that title.</p>
+		</div>
+
+		<p class="border-t border-ink/9 px-5 py-3 text-center text-[0.48rem] font-bold tracking-[0.12em] text-ink/32 uppercase">Search matches tour titles only</p>
+	</div>
+</div>
+
+<script>
+	const normalizeTitle = (value: string) => value
+		.toLocaleLowerCase()
+		.normalize('NFD')
+		.replace(/[\u0300-\u036f]/g, '')
+		.trim();
+
+	document.querySelectorAll<HTMLElement>('[data-tour-search]').forEach((search) => {
+		const form = search.querySelector<HTMLFormElement>('[data-search-form]');
+		const input = search.querySelector<HTMLInputElement>('[data-search-input]');
+		const panel = search.querySelector<HTMLElement>('[data-search-panel]');
+		const count = search.querySelector<HTMLElement>('[data-search-count]');
+		const empty = search.querySelector<HTMLElement>('[data-search-empty]');
+		const results = Array.from(search.querySelectorAll<HTMLAnchorElement>('[data-tour-result]'));
+
+		if (!form || !input || !panel || !count || !empty) return;
+
+		const openPanel = () => {
+			panel.hidden = false;
+			input.setAttribute('aria-expanded', 'true');
+		};
+
+		const closePanel = () => {
+			panel.hidden = true;
+			input.setAttribute('aria-expanded', 'false');
+		};
+
+		const filterResults = () => {
+			const query = normalizeTitle(input.value);
+			let visibleCount = 0;
+
+			results.forEach((result) => {
+				const title = normalizeTitle(result.dataset.title ?? '');
+				const matches = title.includes(query);
+				result.hidden = !matches;
+				if (matches) visibleCount += 1;
+			});
+
+			count.textContent = `${visibleCount} ${visibleCount === 1 ? 'tour' : 'tours'}`;
+			empty.hidden = visibleCount !== 0;
+			openPanel();
+		};
+
+		input.addEventListener('focus', filterResults);
+		input.addEventListener('input', filterResults);
+
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			filterResults();
+			results.find((result) => !result.hidden)?.focus();
+		});
+
+		input.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape') {
+				closePanel();
+				input.blur();
+			}
+
+			if (event.key === 'ArrowDown') {
+				event.preventDefault();
+				filterResults();
+				results.find((result) => !result.hidden)?.focus();
+			}
+		});
+
+		search.addEventListener('focusout', () => {
+			window.setTimeout(() => {
+				if (!(document.activeElement instanceof Node) || !search.contains(document.activeElement)) closePanel();
+			}, 0);
+		});
+
+		document.addEventListener('pointerdown', (event) => {
+			if (event.target instanceof Node && !search.contains(event.target)) closePanel();
+		});
+	});
+</script>

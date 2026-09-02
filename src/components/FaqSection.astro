@@ -1,0 +1,40 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { faqs } from '../data/home';
+
+const faqSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: faqs.map((item) => ({
+		'@type': 'Question',
+		name: item.question,
+		acceptedAnswer: {
+			'@type': 'Answer',
+			text: item.answer,
+		},
+	})),
+};
+---
+
+<section id="faq" class="section-boundary bg-mist py-20 sm:py-28 lg:py-36">
+	<div class="page-shell grid gap-14 lg:grid-cols-[0.72fr_1.28fr] lg:gap-24">
+		<div class="reveal lg:sticky lg:top-28 lg:self-start">
+			<SectionHeading eyebrow="Good to know" title={'Frequently asked<br /><em class="font-normal text-pine-light">questions.</em>'} description="Practical answers from our Cusco-based team before you reserve your Machu Picchu tour." />
+			<a class="mt-8 inline-flex items-center gap-3 text-[10px] font-extrabold tracking-[0.14em] uppercase transition hover:opacity-55" href="/contact">Ask our local team <span aria-hidden="true">↗</span></a>
+		</div>
+
+		<div class="reveal border-t border-ink/15">
+			{faqs.map((item, index) => (
+				<details class="faq-item group border-b border-ink/15" open={index === 0}>
+					<summary class="flex cursor-pointer list-none items-center justify-between gap-7 py-7">
+						<h3 class="text-sm font-extrabold leading-6 sm:text-base">{item.question}</h3>
+						<span class="faq-plus grid size-9 shrink-0 place-items-center rounded-full border border-ink/20 text-xl font-light transition">+</span>
+					</summary>
+					<div class="max-w-2xl pr-14 pb-8 text-sm leading-7 text-ink/72">{item.answer}</div>
+				</details>
+			))}
+		</div>
+	</div>
+</section>
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)}></script>

@@ -1,0 +1,404 @@
+---
+import MegaMenu from "./navigation/MegaMenu.astro";
+import { travelPackages } from "../data/home";
+
+const navItems = [
+	{ label: "Tours in Cusco", href: "/tours-in-cusco" },
+	{ label: "Travel packages", href: "/peru-travel-packages", mega: true },
+	{ label: "Inca Trail", href: "/inca-trail" },
+];
+
+const utilityItems = [
+	{ label: "Blog", href: "/blog" },
+	{ label: "Contact", href: "/contact" },
+];
+
+const languages = [
+	{ code: "EN", label: "English", href: "/", active: true },
+	{ code: "ES", label: "Español", href: "/es", active: false },
+	{ code: "PT", label: "Português", href: "/pt-br", active: false },
+];
+---
+
+<header class="absolute inset-x-0 top-0 z-50">
+	<div class="bg-ink text-white">
+		<div
+			class="page-shell flex min-h-12 items-center justify-between gap-5 py-2 text-[11px] font-semibold tracking-[0.015em] text-white/76 sm:text-xs"
+		>
+			<div class="flex min-w-0 items-center gap-5 lg:gap-7">
+				<a
+					class="utility-link flex items-center gap-2"
+					href="https://web.whatsapp.com/send?phone=51925422602"
+					target="_blank"
+					rel="noreferrer"
+				>
+					<svg
+						aria-hidden="true"
+						viewBox="0 0 24 24"
+						class="size-4 fill-none stroke-current"
+						stroke-width="1.8"
+						><path
+							d="M20 11.6a8 8 0 0 1-11.8 7L4 20l1.4-4.1A8 8 0 1 1 20 11.6Z"
+							stroke-linejoin="round"></path><path
+							d="M9 8.5c.5 2.4 1.7 3.7 4.4 4.8l1.2-1.1 2 .9c.2 1.2-.8 2-2.1 2C10.6 14.7 8.1 12.2 8 9c0-.7.4-1.1 1-1.3l.8 1.7"
+							stroke-linecap="round"
+							stroke-linejoin="round"></path></svg
+					>
+					<span>+51 925 422 602</span>
+				</a>
+				<a
+					class="utility-link hidden items-center gap-2 sm:flex"
+					href="mailto:info@machupicchutour.com"
+				>
+					<svg
+						aria-hidden="true"
+						viewBox="0 0 24 24"
+						class="size-4 fill-none stroke-current"
+						stroke-width="1.8"
+						><path d="M3.5 6.5h17v11h-17z" stroke-linejoin="round"></path><path
+							d="m4 7 8 6 8-6"
+							stroke-linejoin="round"></path></svg
+					>
+					<span>info@machupicchutour.com</span>
+				</a>
+				<p class="hidden items-center gap-2 text-white/52 xl:flex">
+					<svg
+						aria-hidden="true"
+						viewBox="0 0 24 24"
+						class="size-3.5 fill-none stroke-current"
+						stroke-width="1.8"
+						><path
+							d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"
+							stroke-linejoin="round"></path><circle cx="12" cy="10" r="2.3"
+						></circle></svg
+					>
+					Av. Huyna Capac 112-A, Wanchaq
+				</p>
+			</div>
+
+			<div class="flex shrink-0 items-center gap-4 sm:gap-5">
+				<a
+					class="deal-link group relative isolate inline-flex items-center gap-2 overflow-hidden rounded-full bg-sun p-1.5 pr-2.5 text-white shadow-[0_8px_24px_rgba(255,26,0,0.25)] hover:-translate-y-px hover:bg-sun hover:shadow-[0_12px_30px_rgba(255,26,0,0.42)]"
+					href="/peru-travel-packages"
+					aria-label="Save 20 percent on selected 2026 tours"
+				>
+					<strong
+						class="relative rounded-[0.55rem] bg-white/16 px-2.5 py-1 text-xs font-extrabold sm:text-sm"
+						>-20%</strong
+					>
+					<span class="relative hidden leading-none min-[430px]:block">
+						<small
+							class="block text-[7px] font-bold tracking-[0.14em] text-white/65 uppercase"
+							>Limited time</small
+						>
+						<span
+							class="mt-1 block text-[9px] font-extrabold tracking-[0.09em] uppercase"
+							>2026 Deals</span
+						>
+					</span>
+					<svg
+						aria-hidden="true"
+						viewBox="0 0 16 16"
+						class="deal-arrow relative hidden size-3.5 fill-none stroke-current min-[430px]:block"
+						stroke-width="1.7"
+					>
+						<path
+							d="M3 8h9M9 4.5 12.5 8 9 11.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"></path>
+					</svg>
+				</a>
+				<div
+					class="hidden items-center gap-5 border-l border-white/15 pl-5 md:flex"
+				>
+					{
+						utilityItems.map((item) => (
+							<a class="utility-link" href={item.href}>
+								{item.label}
+							</a>
+						))
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<nav
+		class="relative border-b border-ink/10 bg-mist/96 text-ink shadow-[0_12px_45px_rgba(18,24,21,0.08)] backdrop-blur-xl"
+	>
+		<div
+			class="page-shell flex h-[82px] items-center justify-between gap-5 lg:h-[92px]"
+		>
+			<a
+				class="brand-lockup group flex min-w-0 items-center gap-3.5"
+				href="/"
+				aria-label="Machu Picchu Tours home"
+			>
+				<span
+					class="logo-tile grid size-12 shrink-0 place-items-center overflow-hidden rounded-[1rem] bg-sun transition duration-300 group-hover:-rotate-3 group-hover:scale-[1.03] lg:size-14"
+				>
+					<img
+						src="/image.png"
+						alt=""
+						class="h-8 w-9 object-contain lg:h-9 lg:w-10"
+					/>
+				</span>
+				<span class="min-w-0 leading-none">
+					<strong
+						class="block truncate whitespace-nowrap font-sans text-[0.94rem] font-extrabold tracking-[-0.035em] sm:text-[1.12rem] lg:text-[1.28rem]"
+						>Machu Picchu Tours</strong
+					>
+				</span>
+			</a>
+
+			<div class="hidden items-center gap-7 xl:flex">
+				{
+					navItems.map((item) =>
+						item.mega ? (
+							<MegaMenu
+								label={item.label}
+								href={item.href}
+								items={travelPackages}
+							/>
+						) : (
+							<a
+								class="nav-link relative py-3 text-xs font-extrabold tracking-[0.065em] uppercase"
+								href={item.href}
+							>
+								{item.label}
+							</a>
+						),
+					)
+				}
+			</div>
+
+			<div class="hidden items-center gap-5 xl:flex">
+				<details class="language-menu relative border-l border-ink/12 pl-5">
+					<summary
+						class="flex cursor-pointer list-none select-none items-center gap-2 py-3 text-[11px] font-extrabold tracking-[0.1em] uppercase transition hover:text-ink/55"
+						aria-label="Select language"
+					>
+						EN
+						<svg
+							aria-hidden="true"
+							viewBox="0 0 16 16"
+							class="language-chevron size-3 fill-none stroke-current transition"
+							stroke-width="1.7"
+							><path
+								d="m4 6 4 4 4-4"
+								stroke-linecap="round"
+								stroke-linejoin="round"></path></svg
+						>
+					</summary>
+					<div
+						class="absolute top-[calc(100%+0.7rem)] right-0 w-48 overflow-hidden rounded-[1rem] border border-ink/10 bg-mist p-1.5 shadow-[0_20px_55px_rgba(18,24,21,0.18)]"
+					>
+						{
+							languages.map((language) => (
+								<a
+									class:list={[
+										"flex items-center justify-between rounded-[0.72rem] px-3.5 py-3 text-xs font-bold transition",
+										language.active
+											? "bg-ink text-white"
+											: "text-ink/62 hover:bg-ink/5 hover:text-ink",
+									]}
+									href={language.href}
+									lang={
+										language.code === "PT"
+											? "pt-BR"
+											: language.code.toLowerCase()
+									}
+									aria-current={language.active ? "page" : undefined}
+								>
+									<span>{language.label}</span>
+									<span
+										class:list={[
+											"text-[9px] font-extrabold tracking-[0.12em]",
+											language.active ? "text-white/52" : "text-ink/32",
+										]}
+									>
+										{language.code}
+									</span>
+								</a>
+							))
+						}
+					</div>
+				</details>
+				<a
+					class="inline-flex items-center gap-2 rounded-full bg-ink px-5 py-3.5 text-[10px] font-extrabold tracking-[0.1em] text-white uppercase transition hover:-translate-y-0.5 hover:bg-sun"
+					href="/contact"
+				>
+					Plan your trip
+					<span aria-hidden="true">↗</span>
+				</a>
+			</div>
+
+			<details class="mobile-menu relative xl:hidden">
+				<summary
+					class="grid size-11 cursor-pointer list-none place-items-center rounded-full border border-ink/15 bg-mist"
+					aria-label="Open navigation"
+				>
+					<span class="flex w-5 flex-col gap-1.5"
+						><i class="h-px bg-current"></i><i class="h-px bg-current"></i><i
+							class="h-px bg-current"></i></span
+					>
+				</summary>
+				<div
+					class="absolute top-14 right-0 max-h-[calc(100svh-10rem)] w-[min(88vw,22rem)] overflow-y-auto rounded-[1.25rem] border border-ink/10 bg-mist p-4 text-ink shadow-2xl"
+				>
+					{
+						navItems.map((item) =>
+							item.mega ? (
+								<details class="mobile-mega border-b border-ink/10">
+									<summary class="flex cursor-pointer list-none select-none items-center justify-between px-3 py-4 text-sm font-bold">
+										{item.label}
+										<svg
+											aria-hidden="true"
+											viewBox="0 0 16 16"
+											class="mobile-mega-chevron size-3.5 fill-none stroke-current transition"
+											stroke-width="1.7"
+										>
+											<path
+												d="m4 6 4 4 4-4"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+											/>
+										</svg>
+									</summary>
+									<div class="mb-3 grid gap-1 rounded-xl bg-mist p-2">
+										{travelPackages.map((tour) => (
+											<a
+												class="rounded-lg px-3 py-2.5 transition hover:bg-ink/5"
+												href={tour.href}
+											>
+												<strong class="line-clamp-2 block text-[0.68rem] font-bold leading-4 text-ink/72">
+													{tour.title}
+												</strong>
+												<span class="mt-1 block text-[0.48rem] font-bold tracking-[0.08em] text-ink/34 uppercase">
+													{tour.duration}
+												</span>
+											</a>
+										))}
+										<a
+											class="mt-1 rounded-lg bg-sun/88 px-4 py-3 text-center text-[9px] font-extrabold tracking-[0.1em] text-white uppercase"
+											href={item.href}
+										>
+											View all Peru packages →
+										</a>
+									</div>
+								</details>
+							) : (
+								<a
+									class="flex items-center justify-between border-b border-ink/10 px-3 py-4 text-sm font-bold"
+									href={item.href}
+								>
+									{item.label}
+									<span aria-hidden="true">↗</span>
+								</a>
+							),
+						)
+					}
+					<div class="grid grid-cols-2 gap-2 pt-3">
+						{
+							utilityItems.map((item) => (
+								<a
+									class="rounded-xl bg-canvas px-3 py-3 text-center text-xs font-bold"
+									href={item.href}
+								>
+									{item.label}
+								</a>
+							))
+						}
+					</div>
+					<div class="mt-3 border-t border-ink/10 pt-3">
+						<p
+							class="px-2 pb-2 text-[9px] font-extrabold tracking-[0.14em] text-ink/36 uppercase"
+						>
+							Language
+						</p>
+						<div class="grid grid-cols-3 gap-1.5">
+							{
+								languages.map((language) => (
+									<a
+										class:list={[
+											"rounded-xl px-2 py-3 text-center transition",
+											language.active
+												? "bg-ink text-white"
+												: "bg-canvas text-ink/60 hover:text-ink",
+										]}
+										href={language.href}
+										lang={
+											language.code === "PT"
+												? "pt-BR"
+												: language.code.toLowerCase()
+										}
+										aria-current={language.active ? "page" : undefined}
+									>
+										<strong class="block text-[10px] font-extrabold">
+											{language.code}
+										</strong>
+										<span
+											class:list={[
+												"mt-1 block text-[8px] font-semibold",
+												language.active ? "text-white/55" : "text-ink/42",
+											]}
+										>
+											{language.label}
+										</span>
+									</a>
+								))
+							}
+						</div>
+					</div>
+					<a
+						class="mt-3 block rounded-xl bg-sun px-5 py-4 text-center text-xs font-extrabold tracking-wider text-white uppercase"
+						href="/contact">Plan your trip</a
+					>
+				</div>
+			</details>
+		</div>
+	</nav>
+</header>
+
+<script>
+	const megaMenus = Array.from(
+		document.querySelectorAll<HTMLDetailsElement>("[data-mega-menu]"),
+	);
+	const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+	const closeTimers = new WeakMap<
+		HTMLDetailsElement,
+		ReturnType<typeof setTimeout>
+	>();
+
+	megaMenus.forEach((menu) => {
+		menu.addEventListener("pointerenter", () => {
+			if (!finePointer.matches) return;
+			const timer = closeTimers.get(menu);
+			if (timer) window.clearTimeout(timer);
+			megaMenus.forEach((otherMenu) => {
+				if (otherMenu !== menu) otherMenu.open = false;
+			});
+			menu.open = true;
+		});
+
+		menu.addEventListener("pointerleave", () => {
+			if (!finePointer.matches) return;
+			const timer = window.setTimeout(() => {
+				menu.open = false;
+			}, 160);
+			closeTimers.set(menu, timer);
+		});
+
+		menu.addEventListener("keydown", (event) => {
+			if (event.key !== "Escape") return;
+			menu.open = false;
+			menu.querySelector<HTMLElement>("summary")?.focus();
+		});
+	});
+
+	document.addEventListener("pointerdown", (event) => {
+		megaMenus.forEach((menu) => {
+			if (!menu.contains(event.target as Node)) menu.open = false;
+		});
+	});
+</script>

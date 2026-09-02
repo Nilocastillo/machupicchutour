@@ -1,0 +1,259 @@
+---
+import type { TourBookingPricing } from "../../data/tour-details";
+
+interface Props {
+	title: string;
+	price: string;
+	currency: string;
+	booking: TourBookingPricing;
+}
+
+const { title, price, currency, booking } = Astro.props;
+const pricePrefix = currency === "USD" ? "$" : `${currency} `;
+const fieldClass = "mt-2 min-h-12 w-full rounded-xl border border-ink/12 bg-white px-4 text-sm font-semibold text-ink outline-none transition placeholder:text-ink/30 focus:border-ink/30 focus:ring-2 focus:ring-ink/8";
+const travelerTypes = booking.travelers;
+const hotelOptions = booking.hotels;
+const initialHotel = hotelOptions[0];
+const initialTravelers = travelerTypes.reduce((total, traveler) => total + traveler.initial, 0);
+const initialTotal = travelerTypes.reduce((total, traveler) => total + traveler.initial * traveler.price, 0) + initialHotel.supplement;
+const initialDeposit = initialTotal * booking.depositRate;
+const money = (value: number) => `${new Intl.NumberFormat("en-US", { style: "currency", currency, minimumFractionDigits: 2 }).format(value)} ${currency}`;
+---
+
+<aside class="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:sticky lg:top-6" aria-label="Tour booking form">
+	<div class="rounded-[1.6rem] border border-ink/10 bg-paper shadow-[0_24px_70px_rgba(21,25,22,0.12)]">
+		<div class="flex items-end justify-between gap-5 border-b border-ink/10 p-5 sm:p-6">
+			<div>
+				<p class="text-[8px] font-extrabold tracking-[0.15em] text-ink/62 uppercase">Per person</p>
+				<p class="mt-1.5 font-sans text-[2.35rem] font-extrabold leading-none tracking-[-0.055em] text-ink"><span class="mr-1 text-base font-bold text-ink/52">{pricePrefix}</span>{price}</p>
+			</div>
+			<p class="max-w-28 text-right text-[0.58rem] font-semibold leading-4 text-ink/68">Select a date and your travelers.</p>
+		</div>
+
+		<form class="grid gap-4 p-5 sm:p-6" action="https://wa.me/51925422602" method="get" target="_blank" data-tour-booking data-tour-title={title} data-currency={currency} data-deposit-rate={booking.depositRate}>
+			<input type="hidden" name="service" value={booking.service} />
+			<input type="hidden" name="total" value={initialTotal} data-booking-total-input />
+			<input type="hidden" name="deposit" value={initialDeposit} data-booking-deposit-input />
+			<div class="grid grid-cols-2 gap-3">
+				<label class="text-[9px] font-extrabold tracking-[0.08em] text-ink/66 uppercase">
+					Travel date
+					<input class={`${fieldClass} px-3 text-[0.7rem]`} type="date" name="date" required data-tour-date />
+				</label>
+
+				<div class="text-[9px] font-extrabold tracking-[0.08em] text-ink/66 uppercase">
+					<span>Travelers</span>
+					<details class="group relative" data-traveler-picker>
+						<summary class="mt-2 flex min-h-12 cursor-pointer list-none select-none items-center justify-between gap-2 rounded-xl border border-ink/12 bg-white px-3 text-[0.7rem] font-bold tracking-normal text-ink normal-case outline-none transition focus-visible:border-ink/30 focus-visible:ring-2 focus-visible:ring-ink/8" aria-label="Choose travelers">
+							<span class="truncate" data-traveler-summary>{initialTravelers} {initialTravelers === 1 ? "traveler" : "travelers"}</span>
+							<svg aria-hidden="true" viewBox="0 0 16 16" class="size-3.5 shrink-0 fill-none stroke-current text-ink/58 transition group-open:rotate-180" stroke-width="1.7"><path d="m4 6 4 4 4-4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+						</summary>
+
+						<div class="absolute top-[calc(100%+0.5rem)] right-0 z-30 w-[min(19rem,calc(100vw-3rem))] rounded-[1.15rem] border border-ink/12 bg-paper p-3 text-ink shadow-[0_20px_55px_rgba(21,25,22,0.18)]" role="group" aria-label="Traveler counts">
+							{travelerTypes.map((traveler, index) => (
+								<div class:list={["grid min-h-16 grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-1 py-2.5", index > 0 && "border-t border-ink/9"]} data-traveler-row={traveler.key}>
+									<div class="min-w-0 normal-case">
+										<strong class="block text-[0.68rem] font-extrabold text-ink/86">{traveler.label}</strong>
+										<span class="mt-0.5 block text-[0.54rem] font-semibold text-ink/58">{traveler.note}</span>
+										<span class="mt-1 block text-[0.6rem] font-extrabold text-ink/78">{pricePrefix}{traveler.price} {currency}</span>
+									</div>
+									<div class="flex items-center gap-2">
+										<button class="grid size-9 place-items-center rounded-full border border-ink/14 text-base font-bold text-ink transition hover:border-ink/30 disabled:cursor-not-allowed disabled:opacity-30" type="button" data-traveler-action="decrement" aria-label={`Remove one ${traveler.label.toLowerCase()}`}>−</button>
+										<output class="w-5 text-center text-xs font-extrabold text-ink" data-traveler-count={traveler.key} aria-live="polite">{traveler.initial}</output>
+										<button class="grid size-9 place-items-center rounded-full border border-ink/14 text-base font-bold text-ink transition hover:border-ink/30 disabled:cursor-not-allowed disabled:opacity-30" type="button" data-traveler-action="increment" aria-label={`Add one ${traveler.label.toLowerCase()}`}>+</button>
+										<input type="hidden" name={traveler.key} value={traveler.initial} data-traveler-input data-min={traveler.min} data-max={traveler.max} data-rate={traveler.price} />
+									</div>
+								</div>
+							))}
+							<button class="mt-2 min-h-10 w-full rounded-full bg-ink px-5 text-[8px] font-extrabold tracking-[0.12em] text-white uppercase transition hover:bg-sun" type="button" data-traveler-confirm>Confirm travelers</button>
+						</div>
+					</details>
+				</div>
+			</div>
+
+			<div class="text-[9px] font-extrabold tracking-[0.08em] text-ink/66 uppercase">
+				<span>Hotel</span>
+				<details class="group relative" data-hotel-picker>
+					<summary class="mt-2 flex min-h-12 cursor-pointer list-none select-none items-center justify-between gap-3 rounded-xl border border-ink/12 bg-white px-4 text-[0.7rem] font-bold tracking-normal text-ink normal-case outline-none transition focus-visible:border-ink/30 focus-visible:ring-2 focus-visible:ring-ink/8" aria-label="Choose a hotel category">
+						<span class="truncate" data-hotel-summary>No hotel</span>
+						<svg aria-hidden="true" viewBox="0 0 16 16" class="size-3.5 shrink-0 fill-none stroke-current text-ink/58 transition group-open:rotate-180" stroke-width="1.7"><path d="m4 6 4 4 4-4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+					</summary>
+
+					<div class="absolute top-[calc(100%+0.5rem)] inset-x-0 z-30 rounded-[1.15rem] border border-ink/12 bg-paper p-2 text-ink shadow-[0_20px_55px_rgba(21,25,22,0.18)]" role="radiogroup" aria-label="Hotel category">
+						{hotelOptions.map((hotel, index) => {
+							const summary = hotel.supplement > 0 ? `${hotel.label} · +$${hotel.supplement}` : hotel.label;
+							return (
+								<label class:list={["flex min-h-11 cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-[0.68rem] font-bold normal-case transition hover:bg-mist", index > 0 && "border-t border-ink/7"]}>
+									<input class="peer sr-only" type="radio" name="hotel" value={hotel.label} checked={index === 0} data-hotel-option data-hotel-label={hotel.label} data-hotel-supplement={hotel.supplement} data-hotel-summary-value={summary} />
+									<span class="size-4 shrink-0 rounded-full border border-ink/24 transition peer-checked:border-sun peer-checked:bg-sun peer-checked:shadow-[inset_0_0_0_3px_white] peer-focus-visible:ring-2 peer-focus-visible:ring-sun/30 peer-focus-visible:ring-offset-2" aria-hidden="true"></span>
+									<span class="min-w-0 flex-1 text-ink/82">{hotel.label}</span>
+									<span class:list={["shrink-0 text-[0.62rem] font-extrabold", hotel.supplement > 0 ? "text-ink/76" : "text-ink/52"]}>{hotel.supplement > 0 ? `+$${hotel.supplement}` : "No extra"}</span>
+								</label>
+							);
+						})}
+					</div>
+				</details>
+			</div>
+
+			<div class="rounded-[1.1rem] border border-ink/10 bg-mist p-4" aria-live="polite" aria-label="Booking price summary">
+				<dl class="grid grid-cols-2 gap-x-5 gap-y-3">
+					<div class="col-span-2 border-b border-ink/10 pb-3">
+						<dt class="text-[7px] font-extrabold tracking-[0.12em] text-ink/58 uppercase">Date</dt>
+						<dd class="mt-1 text-[0.66rem] font-extrabold text-ink/84" data-summary-date>Select a date</dd>
+					</div>
+					<div>
+						<dt class="text-[7px] font-extrabold tracking-[0.12em] text-ink/58 uppercase">Service</dt>
+						<dd class="mt-1 text-[0.66rem] font-extrabold text-ink/84">{booking.service}</dd>
+					</div>
+					<div>
+						<dt class="text-[7px] font-extrabold tracking-[0.12em] text-ink/58 uppercase">Hotel</dt>
+						<dd class="mt-1 truncate text-[0.66rem] font-extrabold text-ink/84" data-summary-hotel>{initialHotel.label}</dd>
+					</div>
+				</dl>
+				<div class="mt-3 flex items-end justify-between gap-4 border-t border-ink/10 pt-3">
+					<span class="text-[8px] font-extrabold tracking-[0.11em] text-ink/62 uppercase">Total</span>
+					<strong class="text-base font-extrabold tracking-[-0.03em] text-ink" data-summary-total>{money(initialTotal)}</strong>
+				</div>
+				<div class="mt-1.5 flex items-center justify-between gap-4">
+					<span class="text-[8px] font-extrabold tracking-[0.08em] text-ink/62 uppercase">Reserve with only</span>
+					<strong class="text-sm font-extrabold text-sun" data-summary-deposit>{money(initialDeposit)}</strong>
+				</div>
+			</div>
+
+			<button class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-sun px-6 text-[9px] font-extrabold tracking-[0.13em] text-white uppercase transition hover:-translate-y-px hover:bg-sun/88" type="submit">
+				Reserve <span aria-hidden="true">→</span>
+			</button>
+			<p class="text-center text-[0.55rem] font-semibold leading-4 text-ink/62">For now, reservations continue with our local team on WhatsApp.</p>
+		</form>
+	</div>
+</aside>
+
+<script>
+	document.querySelectorAll<HTMLFormElement>("[data-tour-booking]").forEach((form) => {
+		const dateInput = form.querySelector<HTMLInputElement>("[data-tour-date]");
+		if (dateInput) {
+			const today = new Date();
+			today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+			dateInput.min = today.toISOString().split("T")[0];
+		}
+
+		const picker = form.querySelector<HTMLDetailsElement>("[data-traveler-picker]");
+		const travelerSummary = form.querySelector<HTMLElement>("[data-traveler-summary]");
+		const travelerInputs = Array.from(form.querySelectorAll<HTMLInputElement>("[data-traveler-input]"));
+		const hotelPicker = form.querySelector<HTMLDetailsElement>("[data-hotel-picker]");
+		const hotelSelectorSummary = form.querySelector<HTMLElement>("[data-hotel-summary]");
+		const dateSummary = form.querySelector<HTMLElement>("[data-summary-date]");
+		const hotelBookingSummary = form.querySelector<HTMLElement>("[data-summary-hotel]");
+		const totalSummary = form.querySelector<HTMLElement>("[data-summary-total]");
+		const depositSummary = form.querySelector<HTMLElement>("[data-summary-deposit]");
+		const totalInput = form.querySelector<HTMLInputElement>("[data-booking-total-input]");
+		const depositInput = form.querySelector<HTMLInputElement>("[data-booking-deposit-input]");
+		const currency = form.dataset.currency ?? "USD";
+		const depositRate = Number(form.dataset.depositRate ?? 0.5);
+		const moneyFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency, minimumFractionDigits: 2 });
+		const formatMoney = (value: number) => `${moneyFormatter.format(value)} ${currency}`;
+
+		const updateBookingSummary = () => {
+			const travelerTotal = travelerInputs.reduce((total, input) => total + Number(input.value) * Number(input.dataset.rate ?? 0), 0);
+			const selectedHotel = form.querySelector<HTMLInputElement>('[data-hotel-option]:checked');
+			const hotelSupplement = Number(selectedHotel?.dataset.hotelSupplement ?? 0);
+			const total = travelerTotal + hotelSupplement;
+			const deposit = total * depositRate;
+
+			if (hotelBookingSummary) hotelBookingSummary.textContent = selectedHotel?.dataset.hotelLabel ?? "No hotel";
+			if (totalSummary) totalSummary.textContent = formatMoney(total);
+			if (depositSummary) depositSummary.textContent = formatMoney(deposit);
+			if (totalInput) totalInput.value = total.toFixed(2);
+			if (depositInput) depositInput.value = deposit.toFixed(2);
+		};
+
+		const updateTravelerSummary = () => {
+			const total = travelerInputs.reduce((sum, input) => sum + Number(input.value), 0);
+			if (travelerSummary) travelerSummary.textContent = `${total} ${total === 1 ? "traveler" : "travelers"}`;
+		};
+
+		const updateDateSummary = () => {
+			if (!dateInput || !dateSummary) return;
+			if (!dateInput.value) {
+				dateSummary.textContent = "Select a date";
+				return;
+			}
+			const [year, month, day] = dateInput.value.split("-").map(Number);
+			dateSummary.textContent = new Intl.DateTimeFormat("en-US", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(Date.UTC(year, month - 1, day)));
+		};
+
+		dateInput?.addEventListener("change", updateDateSummary);
+		updateDateSummary();
+
+		form.querySelectorAll<HTMLElement>("[data-traveler-row]").forEach((row) => {
+			const input = row.querySelector<HTMLInputElement>("[data-traveler-input]");
+			const output = row.querySelector<HTMLOutputElement>("[data-traveler-count]");
+			const decrement = row.querySelector<HTMLButtonElement>('[data-traveler-action="decrement"]');
+			const increment = row.querySelector<HTMLButtonElement>('[data-traveler-action="increment"]');
+			if (!input || !output || !decrement || !increment) return;
+
+			const minimum = Number(input.dataset.min ?? 0);
+			const maximum = Number(input.dataset.max ?? 12);
+
+			const updateCount = (nextValue: number) => {
+				const value = Math.min(maximum, Math.max(minimum, nextValue));
+				input.value = String(value);
+				output.value = String(value);
+				decrement.disabled = value <= minimum;
+				increment.disabled = value >= maximum;
+				updateTravelerSummary();
+				updateBookingSummary();
+			};
+
+			decrement.addEventListener("click", () => updateCount(Number(input.value) - 1));
+			increment.addEventListener("click", () => updateCount(Number(input.value) + 1));
+			updateCount(Number(input.value));
+		});
+
+		form.querySelector<HTMLButtonElement>("[data-traveler-confirm]")?.addEventListener("click", () => {
+			if (!picker) return;
+			picker.open = false;
+			picker.querySelector<HTMLElement>("summary")?.focus();
+		});
+
+		form.querySelectorAll<HTMLInputElement>("[data-hotel-option]").forEach((option) => {
+			option.addEventListener("change", () => {
+				if (!option.checked) return;
+				if (hotelSelectorSummary) hotelSelectorSummary.textContent = option.dataset.hotelSummaryValue ?? "No hotel";
+				updateBookingSummary();
+				if (!hotelPicker) return;
+				hotelPicker.open = false;
+				hotelPicker.querySelector<HTMLElement>("summary")?.focus();
+			});
+		});
+
+		[picker, hotelPicker].forEach((menu) => {
+			menu?.addEventListener("toggle", () => {
+				if (!menu.open) return;
+				[picker, hotelPicker].forEach((otherMenu) => {
+					if (otherMenu && otherMenu !== menu) otherMenu.open = false;
+				});
+			});
+		});
+
+		updateBookingSummary();
+
+		form.addEventListener("submit", (event) => {
+			event.preventDefault();
+			if (!form.reportValidity()) return;
+
+			const data = new FormData(form);
+			const tour = form.dataset.tourTitle ?? "Tour in Peru";
+			const message = [
+				`Hello, I would like to reserve: ${tour}`,
+				`Travel date: ${data.get("date")}`,
+				`Travelers: ${data.get("adults")} adult(s), ${data.get("students")} student(s), ${data.get("children")} child(ren)`,
+				`Hotel: ${data.get("hotel")}`,
+				`Service: ${data.get("service")}`,
+				`Total: ${totalSummary?.textContent ?? data.get("total")}`,
+				`Reserve with: ${depositSummary?.textContent ?? data.get("deposit")}`,
+			].filter(Boolean).join("\n");
+
+			window.open(`https://wa.me/51925422602?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+		});
+	});
+</script>

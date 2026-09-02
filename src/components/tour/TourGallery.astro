@@ -1,0 +1,158 @@
+---
+import type { TourGalleryImage } from "../../data/tour-details";
+
+interface Props {
+	images: TourGalleryImage[];
+	title: string;
+}
+
+const { images, title } = Astro.props;
+---
+
+<section class="tour-gallery" data-tour-gallery aria-label={`${title} photo gallery`}>
+	<div class="grid gap-2 lg:grid-cols-[1.42fr_1fr]">
+		<button
+			class="group relative overflow-hidden rounded-[1.35rem] text-left"
+			style={`aspect-ratio: ${images[0].width} / ${images[0].height}`}
+			type="button"
+			data-gallery-item
+			data-gallery-src={images[0].src}
+			data-gallery-alt={images[0].alt}
+			data-gallery-caption={images[0].caption}
+			aria-label={`Open photo 1 of ${images.length}: ${images[0].caption}`}
+		>
+			<img class="size-full object-cover transition duration-700 lg:group-hover:scale-[1.025]" src={images[0].src} alt={images[0].alt} width={images[0].width} height={images[0].height} fetchpriority="high" />
+			<div class="absolute inset-0 bg-gradient-to-t from-black/32 via-transparent to-transparent"></div>
+			<span class="absolute bottom-4 left-4 rounded-lg border border-white/20 bg-black/35 px-3 py-2 text-[8px] font-extrabold tracking-[0.12em] text-white uppercase backdrop-blur-md">Open gallery</span>
+		</button>
+
+		<div class="hidden content-start gap-2 lg:grid">
+			<button
+				class="group relative overflow-hidden rounded-[1.35rem] text-left"
+				style={`aspect-ratio: ${images[1].width} / ${images[1].height}`}
+				type="button"
+				data-gallery-item
+				data-gallery-src={images[1].src}
+				data-gallery-alt={images[1].alt}
+				data-gallery-caption={images[1].caption}
+				aria-label={`Open photo 2 of ${images.length}: ${images[1].caption}`}
+			>
+				<img class="size-full object-cover transition duration-700 group-hover:scale-[1.035]" src={images[1].src} alt={images[1].alt} width={images[1].width} height={images[1].height} loading="eager" />
+			</button>
+
+			<div class="grid grid-cols-2 gap-2">
+				{
+					images.slice(2, 4).map((image, index) => (
+						<button
+							class="group relative overflow-hidden rounded-[1.35rem] text-left"
+							style={`aspect-ratio: ${image.width} / ${image.height}`}
+							type="button"
+							data-gallery-item
+							data-gallery-src={image.src}
+							data-gallery-alt={image.alt}
+							data-gallery-caption={image.caption}
+							aria-label={`Open photo ${index + 3} of ${images.length}: ${image.caption}`}
+						>
+							<img class="size-full object-cover transition duration-700 group-hover:scale-[1.045]" src={image.src} alt={image.alt} width={image.width} height={image.height} loading="eager" />
+							{index === 1 && (
+								<span class="absolute right-3 bottom-3 rounded-lg bg-black/52 px-3 py-2 text-[9px] font-extrabold tracking-[0.1em] text-white uppercase backdrop-blur-md">{images.length} photos</span>
+							)}
+						</button>
+					))
+				}
+			</div>
+		</div>
+	</div>
+
+	<div
+		class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 p-4 text-white sm:p-7"
+		data-gallery-dialog
+		role="dialog"
+		aria-modal="true"
+		aria-hidden="true"
+		aria-label={`${title} enlarged photo`}
+	>
+		<div class="relative grid min-h-[70svh] w-[min(94vw,78rem)] place-items-center" data-gallery-window>
+			<button class="absolute top-0 right-0 z-10 rounded-xl border border-white/18 bg-black/50 px-4 py-3 text-[9px] font-extrabold tracking-[0.12em] uppercase backdrop-blur-md transition hover:bg-white hover:text-ink" type="button" data-gallery-close aria-label="Close gallery">Close</button>
+			<button class="absolute left-0 z-10 rounded-xl border border-white/18 bg-black/50 px-4 py-3 text-lg backdrop-blur-md transition hover:bg-white hover:text-ink" type="button" data-gallery-prev aria-label="Previous photo">←</button>
+			<figure class="grid max-w-full justify-items-center gap-4">
+				<img class="max-h-[78svh] max-w-full rounded-[1.2rem] object-contain shadow-2xl" alt="" data-gallery-image />
+				<figcaption class="flex items-center gap-4 text-center text-[0.68rem] text-white/80"><span data-gallery-caption>{images[0].caption}</span><span class="text-white/58" data-gallery-count>1 / {images.length}</span></figcaption>
+			</figure>
+			<button class="absolute right-0 z-10 rounded-xl border border-white/18 bg-black/50 px-4 py-3 text-lg backdrop-blur-md transition hover:bg-white hover:text-ink" type="button" data-gallery-next aria-label="Next photo">→</button>
+		</div>
+	</div>
+</section>
+
+<script>
+	document.querySelectorAll<HTMLElement>("[data-tour-gallery]").forEach((gallery) => {
+		const items = Array.from(gallery.querySelectorAll<HTMLButtonElement>("[data-gallery-item]"));
+		const dialog = gallery.querySelector<HTMLElement>("[data-gallery-dialog]");
+		const image = gallery.querySelector<HTMLImageElement>("[data-gallery-image]");
+		const caption = gallery.querySelector<HTMLElement>("[data-gallery-caption]");
+		const count = gallery.querySelector<HTMLElement>("[data-gallery-count]");
+		if (!dialog || !image || !caption || !count || items.length === 0) return;
+
+		let activeIndex = 0;
+		let lastTrigger: HTMLButtonElement | null = null;
+		let previousBodyOverflow = "";
+
+		const showImage = (index: number) => {
+			activeIndex = (index + items.length) % items.length;
+			const item = items[activeIndex];
+			image.src = item.dataset.gallerySrc ?? "";
+			image.alt = item.dataset.galleryAlt ?? "";
+			caption.textContent = item.dataset.galleryCaption ?? "";
+			count.textContent = `${activeIndex + 1} / ${items.length}`;
+		};
+
+		items.forEach((item, index) => {
+			item.addEventListener("click", () => {
+				lastTrigger = item;
+				showImage(index);
+				previousBodyOverflow = document.body.style.overflow;
+				document.body.style.overflow = "hidden";
+				dialog.classList.remove("hidden");
+				dialog.classList.add("flex");
+				dialog.setAttribute("aria-hidden", "false");
+				requestAnimationFrame(() => gallery.querySelector<HTMLButtonElement>("[data-gallery-close]")?.focus());
+			});
+		});
+
+		const closeDialog = () => {
+			if (dialog.getAttribute("aria-hidden") === "true") return;
+			dialog.classList.add("hidden");
+			dialog.classList.remove("flex");
+			dialog.setAttribute("aria-hidden", "true");
+			document.body.style.overflow = previousBodyOverflow;
+			requestAnimationFrame(() => lastTrigger?.focus({ preventScroll: true }));
+		};
+
+		gallery.querySelector<HTMLButtonElement>("[data-gallery-close]")?.addEventListener("click", closeDialog);
+		gallery.querySelector<HTMLButtonElement>("[data-gallery-prev]")?.addEventListener("click", () => showImage(activeIndex - 1));
+		gallery.querySelector<HTMLButtonElement>("[data-gallery-next]")?.addEventListener("click", () => showImage(activeIndex + 1));
+		dialog.addEventListener("click", (event) => {
+			if (event.target === dialog) closeDialog();
+		});
+		dialog.addEventListener("keydown", (event) => {
+			if (event.key === "Escape") {
+				event.preventDefault();
+				closeDialog();
+				return;
+			}
+
+			if (event.key !== "Tab") return;
+			const focusable = Array.from(dialog.querySelectorAll<HTMLButtonElement>("button:not([disabled])"));
+			if (focusable.length === 0) return;
+			const first = focusable[0];
+			const last = focusable[focusable.length - 1];
+			if (event.shiftKey && document.activeElement === first) {
+				event.preventDefault();
+				last.focus();
+			} else if (!event.shiftKey && document.activeElement === last) {
+				event.preventDefault();
+				first.focus();
+			}
+		});
+	});
+</script>

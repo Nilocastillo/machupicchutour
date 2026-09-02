@@ -1,0 +1,134 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import TourGallery from "../../components/tour/TourGallery.astro";
+import TourFacts from "../../components/tour/TourFacts.astro";
+import TourItinerary from "../../components/tour/TourItinerary.astro";
+import TourFaq from "../../components/tour/TourFaq.astro";
+import TourBookingForm from "../../components/tour/TourBookingForm.astro";
+import { tourDetails, type DetailedTour } from "../../data/tour-details";
+
+export function getStaticPaths() {
+	return tourDetails.map((tour) => ({
+		params: { slug: tour.slug },
+		props: { tour },
+	}));
+}
+
+interface Props {
+	tour: DetailedTour;
+}
+
+const { tour } = Astro.props;
+---
+
+<Layout title={tour.metaTitle} description={tour.metaDescription} socialImage={tour.gallery[0].src}>
+	<Header />
+
+	<main id="top" class="bg-mist">
+		<section class="pt-[9.25rem] sm:pt-[9.5rem] lg:pt-[10rem]">
+			<div class="page-shell">
+				<TourGallery images={tour.gallery} title={tour.title} />
+				<nav class="mt-5 flex items-center gap-2 overflow-hidden text-[8px] font-extrabold tracking-[0.12em] text-ink/62 uppercase" aria-label="Breadcrumb">
+					<a class="transition hover:text-ink" href="/">Home</a>
+					<span aria-hidden="true">/</span>
+					<a class="transition hover:text-ink" href="/tours-in-cusco">Tours in Cusco</a>
+					<span aria-hidden="true">/</span>
+					<span class="truncate text-ink/78" aria-current="page">{tour.shortTitle}</span>
+				</nav>
+			</div>
+		</section>
+
+		<section class="pb-14 pt-8 sm:pb-20 sm:pt-10 lg:pb-24 lg:pt-12">
+			<div class="page-shell grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_23rem] lg:gap-x-14 lg:gap-y-16">
+				<div class="min-w-0 lg:col-start-1 lg:row-start-1">
+					<h1 class="max-w-4xl font-display text-[clamp(3.1rem,6.2vw,6.4rem)] font-medium leading-[0.88] tracking-[-0.052em] text-ink">{tour.title}</h1>
+
+					<nav class="mt-8 flex gap-2 overflow-x-auto pb-2" aria-label="Tour page sections">
+						{[
+							["About", "#about"],
+							["Itinerary", "#itinerary"],
+							["Included", "#included"],
+							["Policies", "#policies"],
+							["FAQ", "#tour-faq"],
+						].map(([label, href]) => <a class="shrink-0 rounded-full border border-ink/12 bg-paper px-4 py-2.5 text-[8px] font-extrabold tracking-[0.11em] text-ink/68 uppercase transition hover:border-ink/24 hover:text-ink" href={href}>{label}</a>)}
+					</nav>
+
+					<div class="mt-8">
+						<TourFacts facts={tour.facts} />
+					</div>
+				</div>
+
+				<article class="min-w-0 lg:col-start-1 lg:row-start-2">
+					<section id="about" class="scroll-mt-8">
+						<p class="text-[9px] font-extrabold tracking-[0.16em] text-ink/62 uppercase">The experience</p>
+						<h2 class="mt-4 font-sans text-[clamp(2rem,3.5vw,3.35rem)] font-extrabold leading-[0.98] tracking-[-0.045em] text-ink">About this experience</h2>
+						<div class="mt-7 grid max-w-3xl gap-5 text-sm leading-7 text-ink/76 sm:text-[0.95rem] sm:leading-8">
+							{tour.about.map((paragraph) => <p>{paragraph}</p>)}
+						</div>
+					</section>
+
+					<div class="mt-14 sm:mt-20">
+						<TourItinerary days={tour.itinerary} />
+					</div>
+
+					<section id="included" class="mt-14 scroll-mt-8 border-t border-ink/12 pt-12 sm:mt-20 sm:pt-16">
+						<p class="text-[9px] font-extrabold tracking-[0.16em] text-ink/62 uppercase">Know before booking</p>
+						<h2 class="mt-4 font-sans text-[clamp(2rem,3.5vw,3.35rem)] font-extrabold leading-[0.98] tracking-[-0.045em] text-ink">Inclusions & exclusions</h2>
+						<div class="mt-9 grid gap-4 md:grid-cols-2">
+							<div class="rounded-[1.4rem] border border-ink/10 bg-paper p-6 sm:p-7">
+								<h3 class="font-sans text-lg font-extrabold tracking-[-0.025em] text-ink">What's included</h3>
+								<ul class="mt-6 grid gap-3.5">
+									{tour.included.map((item) => <li class="flex gap-3 text-[0.72rem] font-semibold leading-5 text-ink/74"><span class="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-[#eaf4e5] text-[#3f6f30]" aria-hidden="true"><svg viewBox="0 0 16 16" class="size-3 fill-none stroke-current" stroke-width="2"><path d="m3.5 8.2 2.7 2.7 6.3-6.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span>{item}</span></li>)}
+								</ul>
+							</div>
+							<div class="rounded-[1.4rem] border border-ink/10 bg-paper p-6 sm:p-7">
+								<h3 class="font-sans text-lg font-extrabold tracking-[-0.025em] text-ink">What's not included</h3>
+								<ul class="mt-6 grid gap-3.5">
+									{tour.excluded.map((item) => <li class="flex gap-3 text-[0.72rem] font-semibold leading-5 text-ink/74"><span class="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-sun/8 text-sun" aria-hidden="true"><svg viewBox="0 0 16 16" class="size-3 fill-none stroke-current" stroke-width="2"><path d="m4.5 4.5 7 7m0-7-7 7" stroke-linecap="round"></path></svg></span><span>{item}</span></li>)}
+								</ul>
+							</div>
+						</div>
+					</section>
+
+					<section id="recommendations" class="mt-14 scroll-mt-8 border-t border-ink/12 pt-12 sm:mt-20 sm:pt-16">
+						<div class="grid gap-8 rounded-[1.5rem] bg-ink p-7 text-white sm:p-9 md:grid-cols-[0.68fr_1fr] md:gap-12">
+							<div>
+								<p class="text-[9px] font-extrabold tracking-[0.16em] text-white/68 uppercase">Recommendations</p>
+								<h2 class="mt-4 font-sans text-[clamp(2rem,3vw,3rem)] font-extrabold leading-[0.98] tracking-[-0.045em]">Before traveling</h2>
+								<p class="mt-5 text-xs leading-6 text-white/74">Pack light, prepare for changing Andean weather and keep your passport accessible.</p>
+							</div>
+							<ul class="grid gap-x-7 gap-y-3 sm:grid-cols-2">
+								{tour.recommendations.map((item) => <li class="flex gap-3 border-b border-white/10 pb-3 text-[0.68rem] font-semibold leading-5 text-white/82"><span class="text-white/58" aria-hidden="true">✓</span><span>{item}</span></li>)}
+							</ul>
+						</div>
+					</section>
+
+					<section id="policies" class="mt-14 scroll-mt-8 border-t border-ink/12 pt-12 sm:mt-20 sm:pt-16">
+						<p class="text-[9px] font-extrabold tracking-[0.16em] text-ink/62 uppercase">Booking terms</p>
+						<h2 class="mt-4 font-sans text-[clamp(2rem,3.5vw,3.35rem)] font-extrabold leading-[0.98] tracking-[-0.045em] text-ink">Policies</h2>
+						<p class="mt-6 max-w-3xl text-sm leading-7 text-ink/76">{tour.policyIntroduction}</p>
+						<div class="mt-8 grid gap-px overflow-hidden rounded-[1.4rem] border border-ink/10 bg-ink/10 sm:grid-cols-2">
+							{tour.policies.map((policy) => (
+								<div class="bg-paper p-6 sm:p-7">
+									<h3 class="text-sm font-extrabold text-ink/88">{policy.title}</h3>
+									{policy.paragraph && <p class="mt-4 text-[0.7rem] leading-6 text-ink/74">{policy.paragraph}</p>}
+									{policy.items && <ul class="mt-4 grid gap-3">{policy.items.map((item) => <li class="flex gap-3 text-[0.7rem] leading-5 text-ink/74"><span class="text-ink/48" aria-hidden="true">—</span><span>{item}</span></li>)}</ul>}
+								</div>
+							))}
+						</div>
+					</section>
+
+					<div class="mt-14 sm:mt-20">
+						<TourFaq items={tour.faqs} />
+					</div>
+				</article>
+
+				<TourBookingForm title={tour.title} price={tour.price} currency={tour.currency} booking={tour.booking} />
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>

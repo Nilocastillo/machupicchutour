@@ -1,0 +1,39 @@
+---
+import type { TourFact } from "../../data/tour-details";
+import TourFactIcon from "./TourFactIcon.astro";
+
+interface Props {
+	facts: TourFact[];
+}
+
+const { facts } = Astro.props;
+
+const difficultyStyles = {
+	easy: "bg-[#eaf4e5] text-[#3f6f30]",
+	moderate: "bg-[#fff2d9] text-[#96600e]",
+	difficult: "bg-[#ffebe8] text-[#bd2819]",
+};
+---
+
+<dl class="grid grid-cols-2 gap-px border-y border-ink/12 bg-ink/12 sm:grid-cols-3 xl:grid-cols-6">
+	{facts.map((fact) => (
+		<div class="group flex min-h-[4.75rem] items-center gap-2.5 bg-mist px-3 py-3">
+			<span class="grid size-9 shrink-0 place-items-center rounded-[0.7rem] bg-sun/8 text-sun transition duration-300 group-hover:bg-sun group-hover:text-white">
+				<TourFactIcon name={fact.icon} />
+			</span>
+			<div class="min-w-0">
+				<dt class="text-[7px] font-extrabold tracking-[0.11em] text-ink/62 uppercase">{fact.label}</dt>
+				<dd
+					class:list={[
+						"mt-1 text-[0.66rem] font-extrabold leading-[1.15rem]",
+						fact.difficultyLevel
+							? `inline-flex rounded-full px-2 py-0.5 ${difficultyStyles[fact.difficultyLevel]}`
+							: "text-ink/84",
+					]}
+				>
+					{fact.value}
+				</dd>
+			</div>
+		</div>
+	))}
+</dl>

@@ -1,0 +1,268 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+export const prerender = false;
+
+Astro.response.status = 404;
+Astro.response.statusText = 'Not Found';
+
+const escapeRoutes = [
+	{
+		label: 'Start from Cusco',
+		detail: 'Return to our homepage',
+		href: '/',
+		icon: '01',
+	},
+	{
+		label: 'Find a new trail',
+		detail: 'Browse our featured tours',
+		href: '/#tours',
+		icon: '02',
+	},
+	{
+		label: 'Follow a local guide',
+		detail: 'Chat with our Cusco team',
+		href: 'https://wa.me/51925422602',
+		icon: '03',
+		external: true,
+	},
+];
+---
+
+<Layout
+	title="Page Not Found | Machu Picchu Tours"
+	description="This route could not be found. Return to Machu Picchu Tours and keep planning your journey through Peru."
+	robots="noindex, nofollow"
+>
+	<Header />
+
+	<main id="top" class="overflow-hidden bg-mist">
+		<section
+			class="error-stage relative isolate flex min-h-[880px] items-center overflow-hidden pt-48 pb-16 sm:pt-52 sm:pb-20 lg:min-h-[960px] lg:pt-56 lg:pb-24"
+			aria-labelledby="error-title"
+		>
+			<svg
+				class="terrain-lines pointer-events-none absolute inset-0 -z-10 size-full text-ink"
+				viewBox="0 0 1440 960"
+				fill="none"
+				preserveAspectRatio="xMidYMid slice"
+				aria-hidden="true"
+			>
+				<path d="M-146 783C60 646 41 509 208 444c164-64 267 82 393-38 113-108 59-274 205-334 175-71 285 113 481 32 82-34 131-88 210-132" />
+				<path d="M-116 833C88 703 92 560 245 500c148-59 255 80 391-24 129-98 88-260 219-320 157-72 269 86 448 23 92-33 155-94 237-124" />
+				<path d="M-80 886c191-114 218-257 361-322 144-66 249 68 389-22 138-89 116-241 237-306 141-76 256 56 418 10 102-30 172-88 259-105" />
+				<path d="M-41 941c185-98 243-231 361-304 133-83 250 50 389-22 143-75 141-221 249-292 129-85 245 30 393 3 106-20 186-72 279-77" />
+				<path d="M93-77c24 128 122 184 216 199 125 21 197-55 286 15 87 68 47 185 145 235 103 52 177-18 284 43 89 51 112 135 232 158 100 19 183-18 270 39" />
+				<path d="M36-41c37 146 146 213 255 227 116 15 192-51 274 12 82 62 54 171 149 223 107 58 183-3 279 49 88 48 124 131 241 155 100 21 190-11 286 47" />
+				<path d="M-27 4c51 156 163 234 288 246 108 10 188-45 264 11 80 59 63 158 153 211 111 65 192 12 280 56 90 45 137 125 249 151 104 24 199 0 300 56" />
+			</svg>
+
+			<div class="page-shell">
+				<div class="grid items-center gap-14 lg:grid-cols-[minmax(0,0.92fr)_minmax(30rem,0.78fr)] lg:gap-16 xl:gap-24">
+					<div class="error-copy relative z-10 max-w-2xl">
+						<p class="eyebrow text-sun">Lost in the Andes · Error 404</p>
+						<h1
+							id="error-title"
+							class="mt-7 font-display text-[clamp(3.8rem,7.2vw,7.5rem)] font-medium leading-[0.84] tracking-[-0.055em] text-ink"
+						>
+							You’ve wandered<br />
+							<em class="font-normal text-ink/45">off the trail.</em>
+						</h1>
+
+						<div class="mt-8 max-w-xl border-l-2 border-sun pl-5 sm:mt-10 sm:pl-7">
+							<p class="text-sm leading-7 text-ink/66 sm:text-base">
+								Even the best journeys take an unexpected turn. The page you’re
+								looking for may have moved, or this path was never mapped.
+							</p>
+						</div>
+
+						<div class="mt-9 flex flex-col gap-3 min-[440px]:flex-row">
+							<a
+								class="group inline-flex items-center justify-center gap-3 rounded-full bg-sun px-7 py-4 text-[10px] font-extrabold tracking-[0.13em] text-white uppercase shadow-[0_14px_35px_rgba(255,26,0,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_42px_rgba(255,26,0,0.3)]"
+								href="/"
+							>
+								Back to basecamp
+								<svg aria-hidden="true" viewBox="0 0 16 16" class="size-3.5 fill-none stroke-current transition group-hover:translate-x-0.5" stroke-width="1.7">
+									<path d="M3 8h9M9 4.5 12.5 8 9 11.5" stroke-linecap="round" stroke-linejoin="round"></path>
+								</svg>
+							</a>
+							<a
+								class="inline-flex items-center justify-center rounded-full border border-ink/18 px-7 py-4 text-[10px] font-extrabold tracking-[0.13em] text-ink uppercase transition hover:border-ink hover:bg-ink hover:text-white"
+								href="/#tours"
+							>
+								Explore our tours
+							</a>
+						</div>
+					</div>
+
+					<div class="error-map relative mx-auto w-full max-w-[34rem] lg:mx-0" aria-hidden="true">
+						<div class="map-orbit absolute -top-5 -right-5 size-28 rounded-full border border-ink/10 sm:-top-8 sm:-right-10 sm:size-40"></div>
+						<div class="map-sun absolute -top-4 right-8 size-24 rounded-full bg-sun sm:-top-8 sm:right-12 sm:size-32"></div>
+						<div class="terrain-window relative aspect-[0.88] overflow-hidden bg-ink text-white shadow-[0_35px_90px_rgba(21,25,22,0.22)]">
+							<svg class="absolute inset-0 size-full opacity-20" viewBox="0 0 560 640" fill="none">
+								<path d="M-32 488c77-78 152-34 202-102 49-66 4-151 78-192 80-45 133 40 214-17 50-36 65-92 127-112" />
+								<path d="M-22 535c85-75 155-31 216-99 59-65 22-147 88-187 72-43 127 30 201-17 58-36 78-90 139-103" />
+								<path d="M-9 584c91-71 162-28 231-95 67-64 43-140 101-181 65-46 119 18 187-18 64-34 90-82 150-84" />
+								<path d="M9 632c98-65 169-22 247-87 76-63 63-132 114-176 57-49 109 4 171-21 68-28 101-70 161-59" />
+								<path d="M-74 72C31 37 72 126 161 105c83-20 95-110 182-105 91 6 111 101 203 99 42-1 79-21 116-8" />
+								<path d="M-66 115c101-30 143 53 231 33 86-20 105-101 186-92 84 9 107 92 194 94 48 1 87-15 128 2" />
+							</svg>
+
+							<p class="error-code absolute inset-x-0 top-[15%] text-center font-display text-[clamp(8.5rem,23vw,13.5rem)] font-medium leading-none tracking-[-0.09em] text-white/92">404</p>
+
+							<svg class="route-line absolute inset-0 size-full" viewBox="0 0 560 640" fill="none">
+								<path class="route-shadow" d="M70 574c52-62 29-113 91-144 61-30 112 16 156-32 52-56-13-109 40-157 39-35 86-10 127-69" />
+								<path class="route-progress" d="M70 574c52-62 29-113 91-144 61-30 112 16 156-32 52-56-13-109 40-157 39-35 86-10 127-69" />
+								<circle cx="70" cy="574" r="8" class="fill-sun stroke-white" stroke-width="4" />
+								<circle cx="484" cy="172" r="13" class="fill-none stroke-sun" stroke-width="5" />
+								<path d="m476 164 16 16m0-16-16 16" class="stroke-sun" stroke-width="4" stroke-linecap="round" />
+							</svg>
+
+							<div class="absolute bottom-8 left-8 flex items-center gap-3 sm:bottom-10 sm:left-10">
+								<span class="relative grid size-3 place-items-center rounded-full bg-sun"><span class="absolute size-7 animate-ping rounded-full border border-sun/45"></span></span>
+								<p class="text-[9px] font-extrabold tracking-[0.16em] text-white/65 uppercase">Last known location</p>
+							</div>
+
+							<div class="absolute right-7 bottom-8 text-right sm:right-9 sm:bottom-10">
+								<span class="block font-display text-2xl italic text-white">Cusco</span>
+								<span class="mt-1 block text-[8px] font-bold tracking-[0.14em] text-white/38 uppercase">13.5320° S · 71.9675° W</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<nav class="escape-routes mt-16 border-y border-ink/10 lg:mt-20" aria-label="Helpful links">
+					<ul class="grid divide-y divide-ink/10 md:grid-cols-3 md:divide-x md:divide-y-0">
+						{
+							escapeRoutes.map((route) => (
+								<li>
+									<a
+										class="group flex items-center gap-5 py-5 transition md:px-7 md:py-7 hover:text-sun"
+										href={route.href}
+										target={route.external ? '_blank' : undefined}
+										rel={route.external ? 'noreferrer' : undefined}
+									>
+										<span class="font-display text-2xl italic text-ink/24 transition group-hover:text-sun/45">{route.icon}</span>
+										<span class="min-w-0 flex-1">
+											<strong class="block text-[11px] font-extrabold tracking-[0.045em] uppercase">{route.label}</strong>
+											<span class="mt-1 block text-[10px] text-ink/45">{route.detail}</span>
+										</span>
+										<span class="transition group-hover:translate-x-1" aria-hidden="true">↗</span>
+									</a>
+								</li>
+							))
+						}
+					</ul>
+				</nav>
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>
+
+<style>
+	.terrain-lines path,
+	.terrain-window > svg path {
+		stroke: currentColor;
+		stroke-width: 1;
+		vector-effect: non-scaling-stroke;
+	}
+
+	.terrain-lines {
+		opacity: 0.08;
+	}
+
+	.terrain-window {
+		border-radius: 48% 48% 2.5rem 2.5rem / 25% 25% 2.5rem 2.5rem;
+	}
+
+	.route-shadow,
+	.route-progress {
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		vector-effect: non-scaling-stroke;
+	}
+
+	.route-shadow {
+		stroke: rgba(255, 255, 255, 0.2);
+		stroke-width: 3;
+		stroke-dasharray: 2 10;
+	}
+
+	.route-progress {
+		stroke: var(--color-sun);
+		stroke-width: 3;
+		stroke-dasharray: 520;
+		stroke-dashoffset: 520;
+		animation: draw-route 1.8s 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+	}
+
+	.error-copy,
+	.error-map,
+	.escape-routes {
+		opacity: 0;
+		transform: translateY(24px);
+		animation: error-rise 780ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+	}
+
+	.error-map {
+		animation-delay: 140ms;
+	}
+
+	.escape-routes {
+		animation-delay: 260ms;
+	}
+
+	.map-sun {
+		animation: sun-drift 5.5s ease-in-out infinite;
+	}
+
+	@keyframes error-rise {
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes draw-route {
+		to {
+			stroke-dashoffset: 0;
+		}
+	}
+
+	@keyframes sun-drift {
+		50% {
+			transform: translateY(-8px);
+		}
+	}
+
+	@media (max-width: 640px) {
+		.terrain-window {
+			border-radius: 45% 45% 1.75rem 1.75rem / 19% 19% 1.75rem 1.75rem;
+		}
+
+		.error-stage {
+			min-height: auto;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.error-copy,
+		.error-map,
+		.escape-routes {
+			opacity: 1;
+			transform: none;
+		}
+
+		.route-progress {
+			stroke-dashoffset: 0;
+		}
+
+		.map-sun {
+			animation: none;
+		}
+	}
+</style>

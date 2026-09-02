@@ -1,0 +1,42 @@
+---
+import type { TourDay } from "../../data/tour-details";
+
+interface Props {
+	days: TourDay[];
+}
+
+const { days } = Astro.props;
+---
+
+<section id="itinerary" class="scroll-mt-8 border-t border-ink/12 pt-12 sm:pt-16">
+	<p class="text-[9px] font-extrabold tracking-[0.16em] text-ink/62 uppercase">Day by day</p>
+	<h2 class="mt-4 font-sans text-[clamp(2rem,3.5vw,3.35rem)] font-extrabold leading-[0.98] tracking-[-0.045em] text-ink">Detailed itinerary</h2>
+
+	<div class="mt-9 grid gap-3">
+		{days.map((day) => (
+			<details class="tour-day group overflow-hidden rounded-[1.4rem] border border-ink/10 bg-paper" open>
+				<summary class="flex cursor-pointer list-none select-none items-start justify-between gap-6 p-5 sm:p-7">
+					<span class="flex min-w-0 gap-4 sm:gap-5">
+						<span class="shrink-0 rounded-lg bg-sun px-3 py-2 text-[8px] font-extrabold tracking-[0.12em] text-white uppercase">Day {day.day}</span>
+						<h3 class="max-w-2xl font-sans text-[1.05rem] font-extrabold leading-6 tracking-[-0.025em] text-ink sm:text-[1.25rem]">{day.title}</h3>
+					</span>
+					<svg aria-hidden="true" viewBox="0 0 16 16" class="size-4 shrink-0 fill-none stroke-current text-ink/58 transition group-open:rotate-180" stroke-width="1.7"><path d="m4 6 4 4 4-4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+				</summary>
+
+				<div class="border-t border-ink/9 px-5 pb-6 pt-5 sm:px-7 sm:pb-8 sm:pt-6">
+					<div class="grid gap-4 text-sm leading-7 text-ink/76">
+						{day.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+					</div>
+					<dl class="mt-7 grid gap-px overflow-hidden rounded-xl border border-ink/9 bg-ink/9 sm:grid-cols-2">
+						{day.stats.map((stat) => (
+							<div class="bg-mist px-4 py-4">
+								<dt class="text-[7px] font-extrabold tracking-[0.13em] text-ink/62 uppercase">{stat.label}</dt>
+								<dd class="mt-1.5 text-[0.66rem] font-bold leading-5 text-ink/80">{stat.value}</dd>
+							</div>
+						))}
+					</dl>
+				</div>
+			</details>
+		))}
+	</div>
+</section>

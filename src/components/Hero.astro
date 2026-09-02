@@ -1,0 +1,67 @@
+---
+import TourSearch from './TourSearch.astro';
+import { machuPicchuTours, travelPackages, trustMarks } from '../data/home';
+
+const searchableTours = [...machuPicchuTours, ...travelPackages];
+---
+
+<section class="image-veil hero-stage relative flex min-h-[820px] items-center overflow-visible bg-ink text-white lg:min-h-[880px] lg:h-[100svh]">
+	<img
+		class="hero-video-poster absolute inset-0 size-full object-cover object-[58%_center] lg:object-center"
+		src="https://api.machupicchutour.com/wp-content/uploads/2026/03/santuario-historico-de-machu-picchu-webp-1.webp"
+		alt="Machu Picchu surrounded by the green Andes"
+		fetchpriority="high"
+	/>
+	<video
+		class="hero-video absolute inset-0 size-full object-cover object-center"
+		src="https://cdn.dreamy.tours/dreamytour_video_1824e5c621.mp4"
+		poster="https://api.machupicchutour.com/wp-content/uploads/2026/03/santuario-historico-de-machu-picchu-webp-1.webp"
+		autoplay
+		muted
+		loop
+		playsinline
+		preload="metadata"
+		disablepictureinpicture
+		disableRemotePlayback
+		aria-hidden="true"
+	></video>
+	<div class="absolute inset-0 bg-[radial-gradient(circle_at_72%_38%,transparent_0%,rgba(7,15,12,0.34)_63%)]"></div>
+	<div class="hero-seals absolute top-1/2 right-[3.5%] z-10 hidden -translate-y-[45%] flex-col gap-2 xl:flex" aria-label="Booking guarantees">
+		{trustMarks.map((item, index) => (
+			<div class:list={['hero-seal grid size-[6.15rem] place-items-center rounded-full border border-white/28 bg-ink/35 px-3 text-center shadow-[0_14px_40px_rgba(0,0,0,0.18)] backdrop-blur-md', index % 2 === 0 ? 'mr-4' : 'ml-1']} style={`--seal-index: ${index}`}>
+				<p class="leading-none">
+					<strong class="block text-[0.74rem] font-extrabold tracking-[-0.02em] text-white">{item.title}</strong>
+					<span class="mt-1.5 block text-[0.44rem] font-bold leading-3 tracking-[0.13em] text-white/60 uppercase">{item.detail}</span>
+				</p>
+			</div>
+		))}
+	</div>
+
+	<div class="page-shell relative z-10 pb-20 pt-52 sm:pb-24 sm:pt-56 lg:pb-24 lg:pt-60">
+		<div class="max-w-[64rem]">
+			<p class="eyebrow hero-intro mb-7 text-white/76">Peru tour operator · Cusco based</p>
+			<h1 class="hero-title max-w-5xl font-display text-[clamp(3rem,6.3vw,6.5rem)] font-medium leading-[0.88] tracking-[-0.052em]">
+				Machu Picchu Tours<br />
+				<em class="font-normal text-white/68">and Peru Travel Packages.</em>
+			</h1>
+			<div class="hero-copy mt-8 flex max-w-3xl flex-col gap-7 border-l-2 border-white/32 pl-5 sm:mt-10 sm:flex-row sm:items-end sm:justify-between sm:pl-7">
+				<p class="max-w-xl text-sm leading-6 text-white/80 sm:text-base sm:leading-7">Choose guided Machu Picchu tours, Inca Trail treks or complete itineraries across Peru—all organized directly by our local team in Cusco.</p>
+				<div class="flex shrink-0 flex-wrap gap-3">
+					<a class="rounded-full bg-sun px-6 py-3.5 text-[10px] font-extrabold tracking-[0.13em] uppercase transition hover:-translate-y-0.5 hover:bg-sun/85" href="/contact">Book now</a>
+					<a class="rounded-full border border-white/40 px-6 py-3.5 text-[10px] font-extrabold tracking-[0.13em] uppercase transition hover:bg-mist hover:text-ink" href="https://wa.me/51925422602">Enquire now</a>
+				</div>
+			</div>
+		</div>
+
+		<TourSearch tours={searchableTours} />
+
+		<div class="hero-seals-mobile mx-auto mt-5 flex max-w-2xl snap-x gap-2 overflow-x-auto pb-2 xl:hidden" aria-label="Booking guarantees">
+			{trustMarks.map((item) => (
+				<div class="min-w-[8.75rem] snap-start rounded-full border border-white/20 bg-ink/30 px-4 py-3 text-center backdrop-blur-md">
+					<strong class="block text-[0.68rem] font-extrabold text-white">{item.title}</strong>
+					<span class="mt-1 block text-[0.43rem] font-bold tracking-[0.13em] text-white/55 uppercase">{item.detail}</span>
+				</div>
+			))}
+		</div>
+	</div>
+</section>

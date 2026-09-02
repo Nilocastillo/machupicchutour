@@ -1,0 +1,54 @@
+---
+const popularTours = [
+	{ label: 'Tours in Cusco', href: '/tours-in-cusco' },
+	{ label: 'Inca Trail', href: '/inca-trail' },
+	{ label: 'Peru travel packages', href: '/peru-travel-packages' },
+	{ label: 'All tours', href: '/tours' },
+];
+
+const packages = ['Machu Picchu & Valley — 2D', 'Cusco classic — 5D', 'Cusco & Titicaca — 7D', 'Lima to Machu Picchu — 8D', 'Peru grand tour — 11D'];
+---
+
+<footer class="border-t border-white/10 bg-ink text-white">
+	<div class="page-shell py-14 sm:py-20">
+		<div class="grid gap-12 border-b border-white/12 pb-14 sm:grid-cols-2 lg:grid-cols-[1.25fr_0.8fr_0.95fr_0.9fr]">
+			<div>
+				<a class="flex items-center gap-3" href="#top"><span class="grid size-12 place-items-center overflow-hidden rounded-xl bg-sun p-2.5 shadow-lg"><img src="/image.png" alt="" class="size-full object-contain" /></span><strong class="block font-sans text-xl font-extrabold tracking-[-0.035em]">Machu Picchu Tours</strong></a>
+				<p class="mt-6 max-w-xs text-xs leading-6 text-white/68">Local experts in personalized travel through Peru. Discover Machu Picchu, the Inca Trail, Sacred Valley and beyond with authentic, safe experiences.</p>
+				<div class="mt-6 flex gap-2">
+					<a class="social-link" href="https://www.facebook.com/machupicchutourpe/" target="_blank" rel="nofollow noreferrer" aria-label="Facebook">f</a>
+					<a class="social-link" href="https://www.instagram.com/machupicchutourpe" target="_blank" rel="nofollow noreferrer" aria-label="Instagram">ig</a>
+					<a class="social-link" href="https://www.tiktok.com/@machupicchutour_pe" target="_blank" rel="nofollow noreferrer" aria-label="TikTok">tt</a>
+					<a class="social-link" href="https://wa.me/51925422602" target="_blank" rel="nofollow noreferrer" aria-label="WhatsApp">wa</a>
+				</div>
+			</div>
+
+			<div>
+				<h3 class="footer-title">Popular tours</h3>
+				<div class="footer-links">{popularTours.map((item) => <a href={item.href}>{item.label}</a>)}</div>
+			</div>
+
+			<div>
+				<h3 class="footer-title">Travel packages</h3>
+				<div class="footer-links">{packages.map((item) => <a href="/peru-travel-packages">{item}</a>)}</div>
+			</div>
+
+			<div>
+				<h3 class="footer-title">Cusco office</h3>
+				<div class="space-y-3 text-xs leading-6 text-white/68">
+					<p>TOURS IN MACHU PICCHU<br />TOUR OPERATOR E.I.R.L.</p>
+					<p>Av. Huyna Capac 112-A, Wanchaq<br />Cusco, Peru</p>
+					<p>Mon–Fri: 9:00am–6:00pm<br />Sat: 8:00am–1:00pm</p>
+					<a class="block hover:text-white" href="tel:+51925422602">+51 925 422 602</a>
+					<a class="block break-all hover:text-white" href="mailto:info@machupicchutour.com">info@machupicchutour.com</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="flex flex-col gap-6 pt-7 text-[9px] font-bold tracking-[0.1em] text-white/35 uppercase lg:flex-row lg:items-center lg:justify-between">
+			<p>© 2026 Machu Picchu Tours · machupicchutour.com. All rights reserved.</p>
+			<div class="flex flex-wrap gap-5"><a class="hover:text-white" href="/about-us">About us</a><a class="hover:text-white" href="/blog">Travel blog</a><a class="hover:text-white" href="/privacy-policy">Privacy policy</a><a class="hover:text-white" href="/terms-and-conditions">Terms</a><a class="hover:text-white" href="/esnna-code">ESNNA code</a></div>
+			<p class="text-white/28">Visa · Mastercard · Amex</p>
+		</div>
+	</div>
+</footer>

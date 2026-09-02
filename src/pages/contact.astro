@@ -1,0 +1,273 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import ContactForm from "../components/contact/ContactForm";
+
+export const prerender = true;
+
+const planningSteps = [
+	{
+		number: "01",
+		title: "Share your idea",
+		copy: "Tell us what inspires you, your dates and your travel style.",
+	},
+	{
+		number: "02",
+		title: "Hear from Cusco",
+		copy: "A local travel expert replies with practical, honest guidance.",
+	},
+	{
+		number: "03",
+		title: "Shape the journey",
+		copy: "We refine the route together until every detail feels right.",
+	},
+];
+
+void planningSteps;
+---
+
+<Layout
+	title="Contact Our Peru Travel Experts | Machu Picchu Tours"
+	description="Plan your Peru journey with a local Cusco-based team. Tell us your dates and travel ideas for personalized Machu Picchu tour guidance."
+>
+	<Header />
+
+	<main id="top" class="overflow-hidden bg-mist">
+		<!-- <section class="contact-hero relative isolate pt-48 pb-16 sm:pt-52 sm:pb-20 lg:pt-56 lg:pb-28">
+			<svg class="contact-contours pointer-events-none absolute inset-y-0 right-0 -z-10 h-full w-[72%] text-ink" viewBox="0 0 900 780" fill="none" aria-hidden="true">
+				<path d="M25 764c52-129 192-124 228-250 35-120-63-189 23-285 84-94 189-21 286-103 74-63 94-153 232-180" />
+				<path d="M94 795c37-131 168-142 214-255 48-118-39-186 39-278 79-94 177-28 277-100 82-59 111-141 244-159" />
+				<path d="M168 825c22-130 143-157 201-260 62-110-15-179 55-267 73-92 163-34 267-96 89-53 128-129 254-138" />
+				<path d="M-17 76c130-22 178 96 294 81 122-16 129-126 247-118 104 7 136 99 253 96 61-2 112-30 170-13" />
+				<path d="M-31 129c132-14 174 95 294 84 124-11 137-112 250-101 103 10 139 94 252 96 66 1 122-23 182-2" />
+			</svg>
+
+			<div class="page-shell">
+				<div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1.08fr)_minmax(25rem,0.72fr)] lg:gap-20">
+					<div class="contact-hero-copy max-w-4xl">
+						<p class="eyebrow text-sun">Plan with people who live here</p>
+						<h1 class="mt-7 font-display text-[clamp(4rem,8vw,8.5rem)] font-medium leading-[0.82] tracking-[-0.06em] text-ink">
+							Tell us where<br />
+							<em class="font-normal text-ink/45">you want to go.</em>
+						</h1>
+						<div class="mt-8 max-w-2xl border-l-2 border-sun pl-5 sm:mt-10 sm:pl-7">
+							<p class="text-sm leading-7 text-ink/70 sm:text-base">
+								No scripts and no generic itineraries. Share the journey you have in mind and
+								our Cusco team will help turn it into a thoughtful route through Peru.
+							</p>
+						</div>
+						<div class="mt-9 flex flex-wrap items-center gap-5">
+							<a class="inline-flex items-center gap-3 rounded-full bg-ink px-6 py-4 text-[10px] font-extrabold tracking-[0.13em] text-white uppercase transition hover:-translate-y-0.5 hover:bg-sun" href="#trip-brief">
+								Start your trip brief <span aria-hidden="true">↓</span>
+							</a>
+							<p class="flex items-center gap-2 text-[10px] font-bold text-ink/50">
+								<span class="size-2 rounded-full bg-[#3f6f30] shadow-[0_0_0_5px_rgba(63,111,48,0.1)]"></span>
+								Usually replies in under 2 hours
+							</p>
+						</div>
+					</div>
+
+					<figure class="contact-photo relative mx-auto aspect-[0.88] w-full max-w-[31rem] overflow-hidden bg-ink shadow-[0_32px_80px_rgba(21,25,22,0.18)] lg:mx-0">
+						<img class="size-full object-cover" src="/tours/llama-picnic/machu-picchu.webp" alt="Travelers overlooking Machu Picchu with a local guide" width="1500" height="800" fetchpriority="high" />
+						<div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/5 to-black/12"></div>
+						<div class="absolute top-7 right-7 grid size-24 place-items-center rounded-full bg-sun text-center text-white shadow-xl sm:size-28">
+							<p class="text-[8px] font-extrabold leading-4 tracking-[0.12em] uppercase">Local team<br /><span class="font-display text-xl font-medium normal-case italic">Cusco</span><br />Peru</p>
+						</div>
+						<figcaption class="absolute inset-x-0 bottom-0 flex items-end justify-between gap-5 p-7 text-white sm:p-9">
+							<p class="max-w-xs font-display text-3xl font-medium leading-[0.95] tracking-[-0.035em]">Local knowledge changes the journey.</p>
+							<span class="shrink-0 text-[8px] font-bold tracking-[0.14em] text-white/52 uppercase">Est. in Cusco</span>
+						</figcaption>
+					</figure>
+				</div>
+
+				<ol class="mt-16 grid border-y border-ink/10 md:grid-cols-3 lg:mt-24">
+					{planningSteps.map((step) => (
+						<li class="group flex gap-5 border-b border-ink/10 py-6 last:border-b-0 md:border-r md:border-b-0 md:px-7 md:first:pl-0 md:last:border-r-0 md:last:pr-0">
+							<span class="font-display text-2xl italic text-sun/55">{step.number}</span>
+							<div>
+								<h2 class="text-[10px] font-extrabold tracking-[0.08em] uppercase">{step.title}</h2>
+								<p class="mt-2 max-w-xs text-[10px] leading-5 text-ink/48">{step.copy}</p>
+							</div>
+						</li>
+					))}
+				</ol>
+			</div>
+		</section>  -->
+
+		<section id="trip-brief" class="bg-mist pt-4">
+			<div
+				class="rounded-t-[2.5rem] border-t border-ink/10 bg-mist py-16 text-ink sm:rounded-t-[4rem] sm:py-24 lg:py-28"
+			>
+				<div class="page-shell">
+					<div class="mb-10 max-w-3xl sm:mb-14">
+						<p class="eyebrow text-ink/48">The first waypoint</p>
+						<h2
+							class="mt-6 font-display text-[clamp(3.2rem,6.5vw,6.7rem)] font-medium leading-[0.87] tracking-[-0.052em]"
+						>
+							Your Peru journey<br /><em class="font-normal text-ink/42"
+								>starts with a conversation.</em
+							>
+						</h2>
+					</div>
+
+					<div
+						class="grid items-start gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.48fr)] lg:gap-16 xl:gap-24"
+					>
+						<ContactForm client:load />
+
+						<aside class="lg:sticky lg:top-8">
+							<p
+								class="text-[9px] font-extrabold tracking-[0.16em] text-ink/42 uppercase"
+							>
+								Prefer a direct line?
+							</p>
+							<div class="mt-6 grid gap-3">
+								<a
+									class="contact-direct group flex items-center justify-between gap-5 rounded-[1.15rem] border border-ink/12 bg-white/35 p-5 transition hover:border-sun hover:bg-white/70"
+									href="https://wa.me/51925422602"
+									target="_blank"
+									rel="noreferrer"
+								>
+									<span>
+										<small
+											class="block text-[8px] font-bold tracking-[0.13em] text-ink/42 uppercase"
+											>WhatsApp</small
+										>
+										<strong class="mt-2 block text-sm font-extrabold text-ink"
+											>+51 925 422 602</strong
+										>
+									</span>
+									<span
+										class="text-ink/42 transition group-hover:translate-x-1 group-hover:text-sun"
+										aria-hidden="true">↗</span
+									>
+								</a>
+								<a
+									class="contact-direct group flex items-center justify-between gap-5 rounded-[1.15rem] border border-ink/12 bg-white/35 p-5 transition hover:border-sun hover:bg-white/70"
+									href="mailto:info@machupicchutour.com"
+								>
+									<span class="min-w-0">
+										<small
+											class="block text-[8px] font-bold tracking-[0.13em] text-ink/42 uppercase"
+											>Email</small
+										>
+										<strong
+											class="mt-2 block break-all text-sm font-extrabold text-ink"
+											>info@machupicchutour.com</strong
+										>
+									</span>
+									<span
+										class="text-ink/42 transition group-hover:translate-x-1 group-hover:text-sun"
+										aria-hidden="true">↗</span
+									>
+								</a>
+							</div>
+
+							<div class="mt-10 border-t border-ink/12 pt-8">
+								<p
+									class="text-[9px] font-extrabold tracking-[0.16em] text-ink/42 uppercase"
+								>
+									Cusco office
+								</p>
+								<address
+									class="mt-5 text-xs leading-6 text-ink/66 not-italic"
+								>
+									Av. Huayna Capac 112-A, Wanchaq<br />Cusco, Peru
+								</address>
+								<dl class="mt-6 grid gap-3 text-[10px] leading-5">
+									<div
+										class="flex justify-between gap-5 border-b border-ink/9 pb-3"
+									>
+										<dt class="text-ink/42">Monday–Friday</dt><dd
+											class="font-bold text-ink/72"
+										>
+											9:00am–6:00pm
+										</dd>
+									</div>
+									<div
+										class="flex justify-between gap-5 border-b border-ink/9 pb-3"
+									>
+										<dt class="text-ink/42">Saturday</dt><dd
+											class="font-bold text-ink/72"
+										>
+											8:00am–1:00pm
+										</dd>
+									</div>
+									<div class="flex justify-between gap-5">
+										<dt class="text-ink/42">Local time</dt><dd
+											class="font-bold text-ink/72"
+										>
+											UTC−5
+										</dd>
+									</div>
+								</dl>
+							</div>
+
+							<div class="mt-9 rounded-[1.15rem] bg-ink/[0.045] p-5">
+								<p class="font-display text-2xl italic text-ink/92">
+									“Real people, in Peru, from the first hello.”
+								</p>
+								<p
+									class="mt-4 text-[9px] font-bold leading-5 tracking-[0.06em] text-ink/42 uppercase"
+								>
+									Personal planning · No call center
+								</p>
+							</div>
+						</aside>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>
+
+<style>
+	.contact-contours path {
+		stroke: currentColor;
+		stroke-width: 1;
+		vector-effect: non-scaling-stroke;
+	}
+
+	.contact-contours {
+		opacity: 0.08;
+	}
+
+	.contact-photo {
+		border-radius: 50% 50% 2.25rem 2.25rem / 22% 22% 2.25rem 2.25rem;
+	}
+
+	.contact-hero-copy,
+	.contact-photo {
+		opacity: 0;
+		transform: translateY(22px);
+		animation: contact-rise 780ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+	}
+
+	.contact-photo {
+		animation-delay: 140ms;
+	}
+
+	@keyframes contact-rise {
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@media (max-width: 640px) {
+		.contact-photo {
+			border-radius: 46% 46% 1.6rem 1.6rem / 18% 18% 1.6rem 1.6rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.contact-hero-copy,
+		.contact-photo {
+			opacity: 1;
+			transform: none;
+		}
+	}
+</style>

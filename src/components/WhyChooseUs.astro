@@ -1,0 +1,24 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { whyChooseUs } from '../data/home';
+---
+
+<section id="why-us" class="bg-canvas py-20 sm:py-28 lg:py-36">
+	<div class="page-shell">
+		<div class="reveal grid gap-10 lg:grid-cols-[1fr_0.7fr] lg:items-end">
+			<SectionHeading eyebrow="Why choose us" title={'A local team.<br /><em class="font-normal text-pine-light">A better journey.</em>'} />
+			<p class="max-w-lg text-sm leading-7 text-ink/60">Many operators offer Machu Picchu tours, but not all are the same. When you book with us, there are no call centers or overseas booking fees—just local expertise and personal service.</p>
+		</div>
+
+		<div class="stagger reveal mt-14 grid gap-px overflow-hidden rounded-[1.8rem] bg-ink/10 sm:grid-cols-2 lg:grid-cols-3">
+			{whyChooseUs.map((item, index) => (
+				<article class="group min-h-52 bg-paper p-7 transition duration-300 hover:bg-white sm:p-8" style={`--item-index: ${index}`}>
+					<div class="flex items-center justify-end">
+						<span class="grid size-10 place-items-center rounded-full border border-ink/12 text-ink/52 transition group-hover:rotate-[-12deg] group-hover:bg-sun group-hover:text-white">↗</span>
+					</div>
+					<p class="mt-8 max-w-sm text-sm font-semibold leading-6 text-ink/72">{item}</p>
+				</article>
+			))}
+		</div>
+	</div>
+</section>

@@ -1,0 +1,39 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import PackageCard from './PackageCard.astro';
+import { travelPackages } from '../data/home';
+
+const included = [
+	'Handpicked accommodation',
+	'Expert guided tours',
+	'All ground transport',
+	'24/7 local assistance',
+];
+---
+
+<section id="packages" class="section-boundary bg-mist py-20 sm:py-28 lg:py-36">
+	<div class="page-shell">
+		<div class="reveal grid gap-10 border-b border-ink/12 pb-12 lg:grid-cols-[1.1fr_0.72fr] lg:items-end">
+			<SectionHeading
+				eyebrow="Peru, fully organized"
+				title={'Complete Peru travel packages<br /><em class="font-normal text-ink/48">including Machu Picchu.</em>'}
+			/>
+			<div class="lg:pb-2">
+				<p class="max-w-xl text-sm leading-7 text-ink/72">If you want to see more of Peru beyond just Machu Picchu, our travel packages combine multiple destinations into one seamless, fully organized itinerary.</p>
+				<a class="mt-7 inline-flex items-center gap-3 rounded-full bg-sun/88 px-6 py-3.5 text-[9px] font-extrabold tracking-[0.14em] text-white uppercase transition hover:-translate-y-0.5 hover:bg-sun" href="/peru-travel-packages">Explore all packages <span aria-hidden="true">↗</span></a>
+			</div>
+		</div>
+
+		<div class="reveal grid overflow-hidden border-x border-b border-ink/10 bg-ink/[0.025] sm:grid-cols-2 lg:grid-cols-4">
+			{included.map((item, index) => (
+				<div class:list={['flex min-h-24 items-center px-5 py-5 sm:px-6', index > 0 && 'lg:border-l lg:border-ink/10', index % 2 !== 0 && 'border-l border-ink/10 lg:border-l', index > 1 && 'border-t border-ink/10 lg:border-t-0']}>
+					<p class="max-w-44 text-[10px] font-extrabold leading-4 tracking-[0.08em] text-ink/58 uppercase">{item}</p>
+				</div>
+			))}
+		</div>
+
+		<div class="stagger reveal mt-10 grid gap-4 xl:grid-cols-2">
+			{travelPackages.map((tour, index) => <PackageCard {...tour} index={index} />)}
+		</div>
+	</div>
+</section>

@@ -1,0 +1,79 @@
+---
+import { getCollection } from 'astro:content';
+import SectionHeading from './SectionHeading.astro';
+import { blogPosts } from '../data/home';
+
+const [featuredEntry] = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+	(a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
+);
+
+if (!featuredEntry) {
+	throw new Error('The home blog section needs at least one published blog entry.');
+}
+
+const featuredPost = {
+	title: featuredEntry.data.title,
+	href: `/blog/${featuredEntry.id}`,
+	image: featuredEntry.data.heroImage,
+	imageAlt: featuredEntry.data.heroAlt,
+	category: featuredEntry.data.category,
+	featuredLabel: featuredEntry.data.featuredLabel,
+	readingTime: featuredEntry.data.readingTime,
+	excerpt: featuredEntry.data.description,
+};
+
+const otherPosts = blogPosts;
+---
+
+<section id="travel-journal" class="overflow-hidden bg-mist py-20 sm:py-28 lg:py-36" aria-labelledby="travel-journal-title">
+	<div class="page-shell">
+		<div class="reveal grid gap-9 border-b border-ink/12 pb-11 lg:grid-cols-[1.12fr_0.7fr] lg:items-end">
+			<div id="travel-journal-title">
+				<SectionHeading
+					eyebrow="Stories from Peru"
+					title={'Travel ideas for a better<br /><em class="font-normal text-ink/48">journey through Peru.</em>'}
+				/>
+			</div>
+			<div class="lg:pb-2">
+				<p class="max-w-xl text-sm leading-7 text-ink/72">Local advice, practical itineraries and cultural stories to help you plan each part of your trip with confidence.</p>
+				<a class="mt-7 inline-flex items-center gap-3 rounded-full bg-sun/88 px-6 py-3.5 text-[9px] font-extrabold tracking-[0.14em] text-white uppercase transition hover:-translate-y-0.5 hover:bg-sun focus-visible:outline-2 focus-visible:outline-sun" href="/blog">Explore the travel blog <span aria-hidden="true">↗</span></a>
+			</div>
+		</div>
+
+		<div class="reveal mt-10 grid gap-3 lg:min-h-[38rem] lg:grid-cols-[1.16fr_0.84fr]">
+			<article class="group relative min-h-[31rem] overflow-hidden rounded-[1.75rem] bg-ink lg:min-h-0">
+				<img class="absolute inset-0 size-full object-cover transition duration-700 ease-out group-hover:scale-[1.035]" src={featuredPost.image} alt={featuredPost.imageAlt} loading="lazy" decoding="async" />
+				<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/12 to-black/18"></div>
+				<div class="absolute inset-x-0 top-0 flex items-center justify-between p-6 sm:p-7">
+					<span class="rounded-full border border-white/20 bg-ink/40 px-3 py-2 text-[8px] font-extrabold tracking-[0.14em] text-white/84 uppercase backdrop-blur-md">{featuredPost.category}</span>
+					<span class="grid size-11 place-items-center rounded-full border border-white/22 bg-ink/40 text-white backdrop-blur-md transition duration-300 group-hover:-rotate-12 group-hover:bg-mist group-hover:text-ink" aria-hidden="true">
+						<svg viewBox="0 0 24 24" class="size-4 fill-none stroke-current" stroke-width="1.8"><path d="M5 19 19 5M9 5h10v10" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+					</span>
+				</div>
+				<div class="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8 lg:p-10">
+					<p class="text-[9px] font-bold tracking-[0.13em] text-white/58 uppercase">{featuredPost.featuredLabel} · {featuredPost.readingTime}</p>
+					<h3 class="mt-4 max-w-3xl font-sans text-[clamp(1.8rem,3.2vw,3.45rem)] font-extrabold leading-[0.98] tracking-[-0.045em]">{featuredPost.title}</h3>
+					{featuredPost.excerpt && <p class="mt-5 max-w-2xl text-xs leading-6 text-white/80 sm:text-sm sm:leading-7">{featuredPost.excerpt}</p>}
+				</div>
+				<a class="absolute inset-0 rounded-[1.75rem] focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-white" href={featuredPost.href} aria-label={`Read ${featuredPost.title}`}></a>
+			</article>
+
+			<div class="grid gap-3 sm:grid-cols-2 lg:grid-rows-2">
+				{otherPosts.map((post, index) => (
+					<article class:list={['group relative min-h-[19rem] overflow-hidden rounded-[1.75rem] bg-ink lg:min-h-0', index === otherPosts.length - 1 && 'sm:col-span-2']}>
+						<img class="absolute inset-0 size-full object-cover transition duration-700 ease-out group-hover:scale-[1.045]" src={post.image} alt={post.title} loading="lazy" decoding="async" />
+						<div class="absolute inset-0 bg-gradient-to-t from-black/88 via-black/8 to-black/12"></div>
+						<div class="absolute inset-x-0 top-0 flex items-start justify-between p-5">
+							<span class="rounded-full border border-white/18 bg-ink/40 px-3 py-2 text-[8px] font-extrabold tracking-[0.12em] text-white/82 uppercase backdrop-blur-md">{post.category}</span>
+							<span class="text-[8px] font-bold tracking-[0.12em] text-white/65 uppercase">{post.readingTime}</span>
+						</div>
+						<div class="absolute inset-x-0 bottom-0 p-5 text-white sm:p-6">
+							<h3 class:list={['max-w-xl font-sans font-extrabold leading-[1.05] tracking-[-0.035em]', index === otherPosts.length - 1 ? 'text-2xl sm:text-[2rem]' : 'text-xl sm:text-2xl']}>{post.title}</h3>
+						</div>
+						<a class="absolute inset-0 rounded-[1.75rem] focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-white" href={post.href} aria-label={`Read ${post.title}`}></a>
+					</article>
+				))}
+			</div>
+		</div>
+	</div>
+</section>

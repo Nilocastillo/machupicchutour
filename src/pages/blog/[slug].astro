@@ -1,0 +1,386 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog', ({ data }) => !data.draft);
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: { post },
+	}));
+}
+
+interface Props {
+	post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const tableOfContents = headings.filter((heading) => heading.depth === 2);
+const publishDate = new Intl.DateTimeFormat('en-US', {
+	month: 'long',
+	day: 'numeric',
+	year: 'numeric',
+	timeZone: 'UTC',
+}).format(post.data.publishDate);
+---
+
+<Layout
+	title={`${post.data.title} | Machu Picchu Tours`}
+	description={post.data.description}
+	socialImage={post.data.heroImage}
+>
+	<Header />
+
+	<main id="top" class="bg-mist">
+		<article>
+			<header class="relative isolate overflow-hidden pt-48 pb-12 sm:pt-52 sm:pb-16 lg:pt-56 lg:pb-20">
+				<svg class="article-contours pointer-events-none absolute inset-y-0 right-0 -z-10 h-full w-[70%] text-ink" viewBox="0 0 860 650" fill="none" aria-hidden="true">
+					<path d="M39 680c64-104 178-83 225-179 47-97-31-165 47-239 78-73 161-3 253-65 77-52 106-129 237-141" />
+					<path d="M112 701c50-105 158-95 216-184 59-91-9-158 61-230 72-75 153-13 247-65 83-46 120-116 245-119" />
+					<path d="M-32 74c124-34 176 68 285 45 113-24 111-122 222-124 103-2 143 76 253 60 58-9 105-44 162-38" />
+					<path d="M-17 128c126-26 173 68 285 49 116-19 120-108 226-105 102 3 145 74 252 64 62-6 113-36 172-25" />
+				</svg>
+
+				<div class="page-shell">
+					<nav class="flex items-center gap-2 text-[9px] font-extrabold tracking-[0.13em] text-ink/60 uppercase" aria-label="Breadcrumb">
+						<a class="transition hover:text-ink" href="/">Home</a>
+						<span aria-hidden="true">/</span>
+						<a class="transition hover:text-ink" href="/blog">Travel journal</a>
+						<span aria-hidden="true">/</span>
+						<span class="truncate text-ink/78" aria-current="page">{post.data.category}</span>
+					</nav>
+
+					<div class="mt-10 max-w-[78rem]">
+						<div class="flex flex-wrap items-center gap-3 text-[9px] font-extrabold tracking-[0.14em] uppercase">
+							<span class="rounded-full bg-sun px-3.5 py-2 text-white">{post.data.category}</span>
+							<span class="text-ink/60">{post.data.featuredLabel} · {post.data.readingTime}</span>
+						</div>
+
+						<h1 class="mt-7 max-w-[76rem] font-display text-[clamp(3.8rem,8vw,8.8rem)] font-medium leading-[0.82] tracking-[-0.06em] text-ink">
+							{post.data.title}
+						</h1>
+						<p class="mt-8 max-w-3xl border-l-2 border-sun pl-5 text-sm leading-7 text-ink/78 sm:pl-7 sm:text-base sm:leading-8">
+							{post.data.description}
+						</p>
+
+						<div class="mt-9 flex flex-wrap items-center gap-x-7 gap-y-3 text-[9px] font-bold tracking-[0.08em] text-ink/60 uppercase">
+							<p><span class="text-ink/82">By {post.data.author}</span> · {post.data.authorRole}</p>
+							<span class="hidden h-3 w-px bg-ink/16 sm:block"></span>
+							<time datetime={post.data.publishDate.toISOString()}>{publishDate}</time>
+						</div>
+					</div>
+				</div>
+			</header>
+
+			<div class="page-shell">
+				<figure class="hero-image relative aspect-[16/8.5] min-h-[25rem] overflow-hidden rounded-[1.5rem] bg-ink sm:rounded-[2.2rem]">
+					<img class="size-full object-cover" src={post.data.heroImage} alt={post.data.heroAlt} width="1500" height="800" fetchpriority="high" />
+					<div class="absolute inset-0 bg-gradient-to-t from-black/58 via-transparent to-black/8"></div>
+					<figcaption class="absolute right-6 bottom-6 left-6 flex items-end justify-between gap-6 text-white sm:right-8 sm:bottom-8 sm:left-8">
+						<p class="max-w-md text-[10px] leading-5 text-white/88">A seven-day route linking Cusco, the Sacred Valley and Machu Picchu at a thoughtful pace.</p>
+						<span class="hidden text-[8px] font-extrabold tracking-[0.15em] text-white/70 uppercase sm:block">Cusco field notes · 01</span>
+					</figcaption>
+				</figure>
+			</div>
+
+			<section class="page-shell py-16 sm:py-20 lg:py-28">
+				<div class="article-layout grid items-start gap-12 xl:grid-cols-[10rem_minmax(0,47rem)_minmax(12rem,1fr)] xl:gap-16">
+					<aside class="hidden xl:block">
+						<div class="sticky top-8 border-t border-ink/12 pt-5">
+							<p class="text-[9px] font-extrabold tracking-[0.15em] text-ink/60 uppercase">Field guide</p>
+							<p class="mt-4 font-sans text-lg font-extrabold leading-[1.2] tracking-[-0.025em] text-ink/85">7 days<br />in the<br />Andes.</p>
+							<div class="mt-6 h-px w-8 bg-sun"></div>
+							<p class="mt-5 text-[10px] leading-5 text-ink/68">Written from Cusco for travelers who value context over checklists.</p>
+						</div>
+					</aside>
+
+					<div class="article-prose min-w-0">
+						<Content />
+					</div>
+
+					<aside class="order-first xl:order-none">
+						<nav class="rounded-[1.5rem] border border-ink/16 bg-white/65 p-5 shadow-[0_18px_50px_rgba(21,25,22,0.06)] sm:p-6 xl:sticky xl:top-8" aria-label="Article contents">
+							<p class="text-[10px] font-extrabold tracking-[0.15em] text-ink/68 uppercase">In this guide</p>
+							<ol class="mt-5 grid gap-1 sm:grid-cols-2 xl:grid-cols-1">
+								{tableOfContents.map((heading, index) => (
+									<li>
+										<a class="group flex min-h-11 items-start gap-4 rounded-xl px-3 py-3 font-sans text-[0.72rem] font-semibold leading-5 text-ink/76 transition hover:bg-ink/[0.055] hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sun" href={`#${heading.slug}`}>
+											<span class="pt-px font-sans text-[0.68rem] font-extrabold tracking-[0.08em] text-[#c91603]">{String(index + 1).padStart(2, '0')}</span>
+											<span>{heading.text}</span>
+										</a>
+									</li>
+								))}
+							</ol>
+						</nav>
+					</aside>
+				</div>
+
+				<div class="mt-16 overflow-hidden rounded-[1.75rem] bg-ink text-white sm:mt-24">
+					<div class="grid items-center gap-8 p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:p-12">
+						<div>
+							<p class="text-[8px] font-extrabold tracking-[0.16em] text-white/62 uppercase">Make it yours</p>
+							<h2 class="mt-4 max-w-3xl font-display text-[clamp(2.7rem,5vw,5rem)] font-medium leading-[0.88] tracking-[-0.045em]">Ready to shape your own seven days in Cusco?</h2>
+							<p class="mt-5 max-w-2xl text-xs leading-6 text-white/78">Share your dates and travel style. Our local team will help you adapt the route around your pace and priorities.</p>
+						</div>
+						<a class="inline-flex shrink-0 items-center justify-center gap-3 rounded-full bg-sun px-7 py-4 text-[9px] font-extrabold tracking-[0.13em] uppercase transition hover:-translate-y-0.5" href="/contact">Plan with a local expert <span aria-hidden="true">↗</span></a>
+					</div>
+				</div>
+			</section>
+		</article>
+	</main>
+
+	<Footer />
+</Layout>
+
+<style>
+	.article-contours path {
+		stroke: currentColor;
+		stroke-width: 1;
+		vector-effect: non-scaling-stroke;
+	}
+
+	.article-contours {
+		opacity: 0.075;
+	}
+
+	.hero-image,
+	header > .page-shell {
+		opacity: 0;
+		transform: translateY(22px);
+		animation: article-rise 780ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+	}
+
+	.hero-image {
+		animation-delay: 140ms;
+	}
+
+	@keyframes article-rise {
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hero-image,
+		header > .page-shell {
+			opacity: 1;
+			transform: none;
+		}
+	}
+</style>
+
+<style is:global>
+	.article-prose {
+		counter-reset: article-section;
+		color: rgb(21 25 22 / 0.82);
+		font-size: 1rem;
+		line-height: 1.85;
+	}
+
+	.article-prose p + p {
+		margin-top: 1.35rem;
+	}
+
+	.article-prose h2 {
+		counter-increment: article-section;
+		position: relative;
+		margin-top: 5rem;
+		padding-top: 2.2rem;
+		border-top: 1px solid rgb(21 25 22 / 0.12);
+		font-family: var(--font-display);
+		font-size: clamp(2.55rem, 5vw, 4.4rem);
+		font-weight: 500;
+		line-height: 0.98;
+		letter-spacing: -0.045em;
+		color: var(--color-ink);
+		scroll-margin-top: 2rem;
+	}
+
+	.article-prose h2::before {
+		content: counter(article-section, decimal-leading-zero);
+		display: block;
+		margin-bottom: 0.8rem;
+		font-family: var(--font-sans);
+		font-size: 0.72rem;
+		font-style: normal;
+		font-weight: 800;
+		letter-spacing: 0.1em;
+		color: #c91603;
+	}
+
+	.article-prose h3 {
+		margin-top: 2.5rem;
+		font-size: 0.73rem;
+		font-weight: 800;
+		letter-spacing: 0.13em;
+		text-transform: uppercase;
+		color: var(--color-ink);
+	}
+
+	.article-prose h2 + p,
+	.article-prose h3 + p {
+		margin-top: 1.3rem;
+	}
+
+	.article-prose strong {
+		font-weight: 800;
+		color: rgb(21 25 22 / 0.94);
+	}
+
+	.article-prose a {
+		color: var(--color-sun);
+		font-weight: 700;
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.2em;
+	}
+
+	.article-prose ul,
+	.article-prose ol {
+		display: grid;
+		gap: 0.7rem;
+		margin-top: 1.5rem;
+		padding-left: 1.25rem;
+	}
+
+	.article-prose ul {
+		list-style: none;
+		padding-left: 0;
+	}
+
+	.article-prose ul li {
+		position: relative;
+		padding-left: 1.4rem;
+	}
+
+	.article-prose ul li::before {
+		position: absolute;
+		top: 0.82em;
+		left: 0;
+		width: 0.35rem;
+		height: 0.35rem;
+		content: '';
+		border-radius: 50%;
+		background: var(--color-sun);
+	}
+
+	.article-prose ol {
+		list-style: decimal;
+	}
+
+	.article-prose blockquote {
+		position: relative;
+		margin: 3rem 0;
+		border-radius: 1.4rem;
+		background: var(--color-ink);
+		padding: 2rem 2rem 2rem 4.4rem;
+		color: rgb(255 255 255 / 0.84);
+		box-shadow: 0 22px 55px rgb(21 25 22 / 0.14);
+	}
+
+	.article-prose blockquote::before {
+		position: absolute;
+		top: 1.2rem;
+		left: 1.4rem;
+		content: '“';
+		font-family: var(--font-sans);
+		font-size: 4.2rem;
+		line-height: 1;
+		color: var(--color-sun);
+	}
+
+	.article-prose blockquote p {
+		margin: 0;
+	}
+
+	.article-prose blockquote strong {
+		color: white;
+	}
+
+	.article-prose figure {
+		margin: 3.5rem 0;
+	}
+
+	.article-prose figure img {
+		width: 100%;
+		aspect-ratio: 15 / 8;
+		border-radius: 1.45rem;
+		object-fit: cover;
+		box-shadow: 0 24px 60px rgb(21 25 22 / 0.13);
+	}
+
+	.article-prose figcaption {
+		margin-top: 0.85rem;
+		padding-left: 0.25rem;
+		font-size: 0.72rem;
+		font-weight: 650;
+		line-height: 1.6;
+		letter-spacing: 0.035em;
+		color: rgb(21 25 22 / 0.68);
+	}
+
+	.article-prose table {
+		width: 100%;
+		margin: 2rem 0 2.5rem;
+		border-collapse: separate;
+		border-spacing: 0;
+		overflow: hidden;
+		border: 1px solid rgb(21 25 22 / 0.1);
+		border-radius: 1rem;
+		background: var(--color-paper);
+		font-size: 0.76rem;
+		line-height: 1.5;
+	}
+
+	.article-prose th,
+	.article-prose td {
+		padding: 0.9rem 1rem;
+		border-bottom: 1px solid rgb(21 25 22 / 0.08);
+		text-align: left;
+	}
+
+	.article-prose th {
+		background: var(--color-ink);
+		font-size: 0.55rem;
+		font-weight: 800;
+		letter-spacing: 0.09em;
+		text-transform: uppercase;
+		color: white;
+	}
+
+	.article-prose tr:last-child td {
+		border-bottom: 0;
+	}
+
+	@media (max-width: 640px) {
+		.article-prose {
+			font-size: 0.94rem;
+			line-height: 1.82;
+		}
+
+		.article-prose h2 {
+			margin-top: 4rem;
+		}
+
+		.article-prose blockquote {
+			padding: 4.1rem 1.4rem 1.5rem;
+		}
+
+		.article-prose blockquote::before {
+			top: 0.8rem;
+			left: 1.3rem;
+		}
+
+		.article-prose table {
+			display: block;
+			overflow-x: auto;
+			white-space: nowrap;
+		}
+	}
+</style>

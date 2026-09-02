@@ -1,0 +1,28 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { travelGuide } from '../data/home';
+---
+
+<section class="bg-paper py-20 sm:py-28 lg:py-36">
+	<div class="page-shell">
+		<div class="reveal">
+			<SectionHeading align="center" eyebrow="Plan better" title={'Complete guide to<br /><em class="font-normal text-pine-light">Machu Picchu tours.</em>'} description="Everything you need to know before embarking on your Machu Picchu tour—written by our local guides, not by algorithms." />
+		</div>
+
+		<div class="stagger reveal mt-14 grid gap-4 lg:grid-cols-3">
+			{travelGuide.map((group, index) => (
+				<article class="rounded-[1.5rem] border border-ink/10 bg-canvas p-6 sm:p-8" style={`--item-index: ${index}`}>
+					<div class="flex items-center gap-4">
+						<span class="grid size-11 place-items-center rounded-xl bg-ink/8 text-ink/62">
+							{index === 0 ? '☀' : index === 1 ? '♡' : '⌁'}
+						</span>
+						<h3 class="font-display text-3xl font-semibold leading-none">{group.title}</h3>
+					</div>
+					<ul class="mt-8 space-y-4">
+						{group.items.map((item) => <li class="flex items-start gap-3 text-sm font-medium leading-6 text-ink/64"><span class="mt-2 size-1.5 shrink-0 rounded-full bg-ink/28"></span>{item}</li>)}
+					</ul>
+				</article>
+			))}
+		</div>
+	</div>
+</section>

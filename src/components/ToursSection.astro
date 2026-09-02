@@ -1,0 +1,58 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import TourCard from './TourCard.astro';
+import type { Tour } from '../data/home';
+
+interface Props {
+	id?: string;
+	eyebrow: string;
+	title: string;
+	description: string;
+	tours: Tour[];
+	theme?: 'light' | 'dark' | 'neutral';
+	layout?: 'grid' | 'bento';
+	footerText?: string;
+	footerHref?: string;
+}
+
+const {
+	id,
+	eyebrow,
+	title,
+	description,
+	tours,
+	theme = 'light',
+	layout = 'grid',
+	footerText = 'View all tours',
+	footerHref = '/tours',
+} = Astro.props;
+const dark = theme === 'dark';
+const neutral = theme === 'neutral';
+const isBento = layout === 'bento';
+const bentoCards = [
+	{ className: 'sm:col-span-2 lg:col-span-6 lg:row-span-2 lg:col-start-1 lg:row-start-1', variant: 'featured' as const },
+	{ className: 'lg:col-span-3 lg:row-span-2 lg:col-start-7 lg:row-start-1', variant: 'tall' as const },
+	{ className: 'lg:col-span-3 lg:row-span-1 lg:col-start-10 lg:row-start-1', variant: 'compact' as const },
+	{ className: 'lg:col-span-3 lg:row-span-1 lg:col-start-10 lg:row-start-2', variant: 'compact' as const },
+	{ className: 'lg:col-span-3 lg:row-span-2 lg:col-start-1 lg:row-start-3', variant: 'tall' as const },
+	{ className: 'lg:col-span-3 lg:row-span-1 lg:col-start-4 lg:row-start-3', variant: 'compact' as const },
+	{ className: 'lg:col-span-3 lg:row-span-1 lg:col-start-4 lg:row-start-4', variant: 'compact' as const },
+	{ className: 'sm:col-span-2 lg:col-span-6 lg:row-span-2 lg:col-start-7 lg:row-start-3', variant: 'featured' as const },
+];
+---
+
+<section id={id} class:list={['py-20 sm:py-28 lg:py-36', dark ? 'bg-pine text-white' : neutral ? 'bg-mist text-ink' : 'bg-paper text-ink']}>
+	<div class="page-shell">
+		<div class="reveal flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+			<SectionHeading {eyebrow} {title} {description} theme={dark ? 'dark' : 'light'} />
+			<a class="inline-flex shrink-0 items-center gap-3 text-[10px] font-extrabold tracking-[0.14em] uppercase transition hover:opacity-55" href={footerHref}>{footerText}<span aria-hidden="true">↗</span></a>
+		</div>
+
+		<div class:list={['stagger reveal mt-14 grid gap-4 sm:grid-cols-2', isBento ? 'lg:grid-cols-12 lg:auto-rows-[13rem]' : 'lg:grid-cols-4']}>
+			{tours.map((tour, index) => {
+				const card = isBento ? bentoCards[index % bentoCards.length] : undefined;
+				return <TourCard {...tour} index={index} layoutClass={card?.className} variant={card?.variant} />;
+			})}
+		</div>
+	</div>
+</section>
